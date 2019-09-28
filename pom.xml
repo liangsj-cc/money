@@ -168,6 +168,20 @@
             <artifactId>spring-boot-starter-quartz</artifactId>
         </dependency>
 
+        <!-- lombok-->
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <version>1.16.20</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <!--yml -->
+        <dependency>
+            <groupId>org.yaml</groupId>
+            <artifactId>snakeyaml</artifactId>
+            <version>${snakeyaml.version}</version>
+        </dependency>
         <!--需要分布式session的话需要放开注释-->
         <!--<dependency>-->
         <!--<groupId>org.springframework.session</groupId>-->
@@ -215,7 +229,7 @@
                     <useDefaultDelimiters>false</useDefaultDelimiters>
                 </configuration>
             </plugin>
-            <plugin>
+          <!--  <plugin>
                 <groupId>io.fabric8</groupId>
                 <artifactId>docker-maven-plugin</artifactId>
                 <version>0.26.1</version>
@@ -238,7 +252,7 @@
                         </image>
                     </images>
                 </configuration>
-            </plugin>
+            </plugin>-->
         </plugins>
         <resources>
             <resource>
