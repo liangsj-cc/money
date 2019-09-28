@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
  * @Date 2019年9月28日20:27:22
  */
 @Controller
-@RequestMapping("/people")
+@RequestMapping("/score")
 public class ScoreController {
 
     private String PREFIX = "/modular/work/people/";
