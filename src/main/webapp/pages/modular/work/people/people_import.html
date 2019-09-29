@@ -1,0 +1,14 @@
+@layout("/common/_container.html",{bg:"bg-white",js:["/assets/modular/work/people_add.js"]}){
+
+<form id="userForm" lay-filter="userForm" class="layui-form model-form">
+    <input name="userId" type="hidden"/>
+
+    <button class="layui-btn" lay-filter="btnDowload" lay-submit>下载模板</button>
+
+
+    <div class="layui-form-item text-right">
+        <button class="layui-btn layui-btn-primary" type="button" ew-event="closeDialog">取消</button>
+        <button class="layui-btn" lay-filter="btnSubmit" lay-submit>保存</button>
+    </div>
+</form>
+@}

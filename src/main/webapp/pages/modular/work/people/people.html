@@ -1,4 +1,4 @@
-@layout("/common/_container.html",{plugins:["ztree"],js:["/assets/modular/system/user/user.js"]}){
+@layout("/common/_container.html",{plugins:["ztree"],js:["/assets/modular/work/people.js"]}){
 
 <div class="layui-body-header">
     <span class="layui-body-header-title">人员管理</span>
@@ -19,10 +19,13 @@
                     <div class="layui-form toolbar">
                         <div class="layui-form-item">
                             <div class="layui-inline">
-                                <input id="name" class="layui-input" type="text" placeholder="账号/姓名/手机号"/>
+                                <input id="peopleName" class="layui-input" type="text" placeholder="姓名"/>
                             </div>
                             <div class="layui-inline">
-                                <input id="timeLimit" class="layui-input" type="text" placeholder="注册时间"/>
+                                <input id="peopleDept" class="layui-input" type="text" placeholder="部门"/>
+                            </div>
+                            <div class="layui-inline">
+                                <input id="peopleType" class="layui-input" type="text" placeholder="工种类型"/>
                             </div>
                             <div class="layui-inline">
                                 <button id="btnSearch" class="layui-btn icon-btn"><i class="layui-icon">&#xe615;</i>搜索</button>
@@ -30,10 +33,11 @@
                                 <button id="btnAdd" class="layui-btn icon-btn"><i class="layui-icon">&#xe654;</i>添加</button>
                                 @}
                                 <button id="btnExp" class="layui-btn icon-btn"><i class="layui-icon">&#xe67d;</i>导出</button>
+                                <button id="btnExpin" class="layui-btn icon-btn"><i class="layui-icon">&#xe67d;</i>导入</button>
                             </div>
                         </div>
                     </div>
-                    <table class="layui-table" id="userTable" lay-filter="userTable"></table>
+                    <table class="layui-table" id="peopleTable" lay-filter="peopleTable"></table>
                 </div>
             </div>
         </div>
