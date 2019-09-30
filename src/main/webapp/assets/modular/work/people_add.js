@@ -71,13 +71,23 @@ layui.use(['layer', 'form', 'admin', 'laydate', 'ax'], function () {
     });
 
 
+    //下载人员导入模板
     $('#btnDowload').click(function () {
-        var ajax = new $ax(Feng.ctxPath + "/people/export", function (data) {
-            Feng.success("重置密码成功!");
-        }, function (data) {
-            Feng.error("重置密码失败!");
+        window.location.href=Feng.ctxPath + "/people/export";
+
+    });
+    layui.use('upload', function(){
+        var $ = layui.jquery,
+        upload = layui.upload;
+        //导入人员名单
+        //指定允许上传的文件类型
+        upload.render({
+            elem: '#upload_people'
+            ,url: '/people/'
+            ,accept: 'file' //普通文件
+            ,done: function(res){
+                console.log(res)
+            }
         });
-        //ajax.set("userId", data.userId);
-        ajax.start();
     });
 });
