@@ -16,10 +16,14 @@
 package cn.stylefeng.guns;
 
 import cn.stylefeng.roses.core.config.WebAutoConfiguration;
+import me.chanjar.weixin.mp.api.WxMpInMemoryConfigStorage;
+import me.chanjar.weixin.mp.api.WxMpService;
+import me.chanjar.weixin.mp.api.impl.WxMpServiceImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.annotation.Bean;
 import org.springframework.scheduling.annotation.EnableScheduling;
 
 /**
@@ -37,5 +41,17 @@ public class GunsApplication {
     public static void main(String[] args) {
         SpringApplication.run(GunsApplication.class, args);
         logger.info(GunsApplication.class.getSimpleName() + " is success!");
+    }
+
+
+    @Bean
+    public WxMpService wxMpService() {
+
+        WxMpService wxMpService = new WxMpServiceImpl();
+        WxMpInMemoryConfigStorage wxMpInMemoryConfigStorage = new WxMpInMemoryConfigStorage();
+        wxMpInMemoryConfigStorage.setAppId("wxda7b64f4a045e7a8");
+        wxMpInMemoryConfigStorage.setSecret("e614db1a91fc5daca2235fcf7746050f");
+        wxMpService.setWxMpConfigStorage(wxMpInMemoryConfigStorage);
+        return wxMpService;
     }
 }
