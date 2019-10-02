@@ -19,10 +19,9 @@ layui.use(['layer', 'form', 'table', 'admin', 'ax'], function () {
     Notice.initColumn = function () {
         return [[
             {type: 'checkbox'},
-            {field: 'noticeId', hide: true, sort: true, title: 'id'},
-            {field: 'title', sort: true, title: '标题'},
-            {field: 'content', sort: true, title: '内容'},
-            {field: 'createrName', sort: true, title: '发布者'},
+            {field: 'examId', hide: false, sort: true, title: 'id'},
+            {field: 'examName', sort: true, title: '标题'},
+            {field: 'examType', sort: true, title: '内容'},
             {field: 'createTime', sort: true, title: '创建时间'},
             {align: 'center', toolbar: '#tableBar', title: '操作', minWidth: 200}
         ]];
@@ -33,7 +32,8 @@ layui.use(['layer', 'form', 'table', 'admin', 'ax'], function () {
      */
     Notice.search = function () {
         var queryData = {};
-        queryData['condition'] = $("#condition").val();
+        queryData['examName'] = $("#examName").val();
+        queryData['examType'] = $("#examType").val();
         table.reload(Notice.tableId, {where: queryData});
     };
 
@@ -71,28 +71,28 @@ layui.use(['layer', 'form', 'table', 'admin', 'ax'], function () {
     };
 
     /**
-     * 点击删除通知
+     * 点击删除题目
      *
      * @param data 点击按钮时候的行数据
      */
     Notice.onDeleteNotice = function (data) {
         var operation = function () {
-            var ajax = new $ax(Feng.ctxPath + "/notice/delete", function (data) {
+            var ajax = new $ax(Feng.ctxPath + "/exam/delete", function (data) {
                 Feng.success("删除成功!");
                 table.reload(Notice.tableId);
             }, function (data) {
                 Feng.error("删除失败!" + data.responseJSON.message + "!");
             });
-            ajax.set("noticeId", data.noticeId);
+            ajax.set("examId", data.examId);
             ajax.start();
         };
-        Feng.confirm("是否删除通知 " + data.title + "?", operation);
+        Feng.confirm("是否删除题目 ?", operation);
     };
 
     // 渲染表格
     var tableResult = table.render({
         elem: '#' + Notice.tableId,
-        url: Feng.ctxPath + '/notice/list',
+        url: Feng.ctxPath + '/exam/list',
         page: true,
         height: "full-98",
         cellMinWidth: 100,
@@ -113,7 +113,6 @@ layui.use(['layer', 'form', 'table', 'admin', 'ax'], function () {
     table.on('tool(' + Notice.tableId + ')', function (obj) {
         var data = obj.data;
         var layEvent = obj.event;
-
         if (layEvent === 'edit') {
             Notice.onEditNotice(data);
         } else if (layEvent === 'delete') {

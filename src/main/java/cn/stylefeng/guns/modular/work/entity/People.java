@@ -38,6 +38,12 @@ public class People implements Serializable {
     private String peopleIdentify;
 
     /**
+     * 微信VXopenid
+     */
+    @TableField("people_openid")
+    private String peopleOpenId;
+
+    /**
      * 部门
      */
     @TableField("people_dept")

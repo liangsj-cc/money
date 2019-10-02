@@ -27,6 +27,7 @@ layui.use(['layer', 'form', 'table', 'ztree', 'laydate', 'admin', 'ax'], functio
             {type: 'checkbox'},
             {field: 'peopleId', sort: true, title: '编号'},
             {field: 'peopleName', sort: true, title: '姓名'},
+            {field: 'peopleOpenId', sort: true, title: '微信号'},
             {field: 'peopleIdentify', sort: true, title: '身份证号'},
             {field: 'peopleType', sort: true, title: '工种类型'},
             {field: 'peopleDept', sort: true, title: '部门'},
@@ -135,16 +136,16 @@ layui.use(['layer', 'form', 'table', 'ztree', 'laydate', 'admin', 'ax'], functio
      */
     MgrUser.onDeleteUser = function (data) {
         var operation = function () {
-            var ajax = new $ax(Feng.ctxPath + "/mgr/delete", function () {
+            var ajax = new $ax(Feng.ctxPath + "/people/delete", function () {
                 table.reload(MgrUser.tableId);
                 Feng.success("删除成功!");
             }, function (data) {
                 Feng.error("删除失败!" + data.responseJSON.message + "!");
             });
-            ajax.set("userId", data.userId);
+            ajax.set("peopleId", data.peopleId);
             ajax.start();
         };
-        Feng.confirm("是否删除用户" + data.account + "?", operation);
+        Feng.confirm("是否删除用户?", operation);
     };
 
     /**

@@ -11,7 +11,10 @@ import cn.stylefeng.roses.core.base.controller.BaseController;
 import cn.stylefeng.roses.core.datascope.DataScope;
 import cn.stylefeng.roses.core.reqres.response.ResponseData;
 import cn.stylefeng.roses.kernel.model.exception.ServiceException;
+import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import org.apache.poi.hssf.usermodel.HSSFRow;
+import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +23,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -27,6 +31,8 @@ import javax.validation.Valid;
 import java.io.FileInputStream;
 import java.io.OutputStream;
 import java.net.URLEncoder;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -198,6 +204,52 @@ public class PeopleController extends BaseController {
         }
     }
 
+    /**
+     *  删除人员
+     * @param peopleId
+     * @return
+     */
+    @RequestMapping(value = "/delete")
+    @ResponseBody
+    public Object delete(@RequestParam Long peopleId) {
+        this.peopleService.removeById(peopleId);
+        return SUCCESS_TIP;
+    }
 
+    /**
+     *导入人员
+     */
+    @RequestMapping("/importExcle")
+    @ResponseBody
+    public Object uploadExcle(@RequestParam MultipartFile file){
+        if(file == null){
+            return "2001";
+        }
+        String name = file.getOriginalFilename();
+        long size = file.getSize();
+        if (name == null || ("").equals(name) && size == 0){
+            return "2001";
+        }
+        try{
+            HSSFWorkbook workbook = new HSSFWorkbook(file.getInputStream());
+            HSSFSheet sheet0=workbook.getSheetAt(0);
+            HSSFRow row0 = sheet0.getRow(0);
+            sheet0.removeRow(row0);
+            JSONObject json = new JSONObject();
+            for (Row row : sheet0){
+                People people = new People();
+                people.setPeopleName(row.getCell(0).getStringCellValue());
+                people.setPeopleIdentify(row.getCell(1).getStringCellValue());
+                people.setPeopleSex(row.getCell(2).getStringCellValue());
+                people.setPeopleDept(row.getCell(3).getStringCellValue());
+                people.setPeopleType(row.getCell(4).getStringCellValue());
+                //解析成json后添加至数据库
+                peopleService.peopleAdd(people);
+            }
+        }catch (Exception e){
+
+        }
+        return SUCCESS_TIP;
+    }
 
 }

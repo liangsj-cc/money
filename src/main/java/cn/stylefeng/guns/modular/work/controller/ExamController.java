@@ -1,9 +1,15 @@
 package cn.stylefeng.guns.modular.work.controller;
 
+
+import cn.stylefeng.guns.core.common.page.LayuiPageFactory;
+
+import cn.stylefeng.guns.core.shiro.ShiroKit;
 import cn.stylefeng.guns.modular.work.service.ExamService;
 import cn.stylefeng.roses.core.base.controller.BaseController;
-import cn.stylefeng.roses.core.reqres.response.ResponseData;
+import cn.stylefeng.roses.core.datascope.DataScope;
+
 import com.alibaba.fastjson.JSONObject;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
@@ -17,11 +23,12 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.FileInputStream;
+
 import java.io.OutputStream;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 @Controller
 @RequestMapping("/exam")
@@ -53,6 +60,32 @@ public class ExamController extends BaseController {
     public String examAdd() {
         return PREFIX + "exam_import.html";
     }
+
+    /**
+     * 查询人员列表
+     *
+     * @author liangsj
+     * @Date 2019年10月02日08:27:22
+     */
+    @RequestMapping("/list")
+    @ResponseBody
+    public Object list(@RequestParam(required = false) String examName,
+                       @RequestParam(required = false) String examType) {
+
+
+        if (ShiroKit.isAdmin()) {
+            Page<Map<String, Object>> peoples = examService.selectExam(null, examName, examType);
+
+            return LayuiPageFactory.createPageInfo(peoples);
+        } else {
+            DataScope dataScope = new DataScope(ShiroKit.getDeptDataScope());
+            Page<Map<String, Object>> peoples = examService.selectExam(null, examName, examType);
+
+            return LayuiPageFactory.createPageInfo(peoples);
+        }
+
+    }
+
 
     /**
      * 导出excle人员模板
@@ -145,7 +178,7 @@ public class ExamController extends BaseController {
     }
 
     /**
-     *
+     *导入习题
      */
     @RequestMapping("/importExcle")
     @ResponseBody
@@ -195,6 +228,18 @@ public class ExamController extends BaseController {
         }catch (Exception e){
 
         }
+        return SUCCESS_TIP;
+    }
+
+    /**
+     *
+     * @param examId
+     * @return
+     */
+    @RequestMapping(value = "/delete")
+    @ResponseBody
+    public Object delete(@RequestParam Long examId) {
+        this.examService.removeById(examId);
         return SUCCESS_TIP;
     }
 

@@ -76,17 +76,29 @@ layui.use(['layer', 'form', 'admin', 'laydate', 'ax'], function () {
         window.location.href=Feng.ctxPath + "/people/export";
 
     });
-    layui.use('upload', function(){
-        var $ = layui.jquery,
+
+    //倒数数据库
+    layui.use(['element','upload'], function() {
+        element = layui.element;
         upload = layui.upload;
-        //导入人员名单
+
         //指定允许上传的文件类型
         upload.render({
-            elem: '#upload_people'
-            ,url: '/people/'
+            elem: '#uploadExcel'
+            ,url: Feng.ctxPath+'/people/importExcle'
             ,accept: 'file' //普通文件
+            ,exts: 'xls|xlsx' //只允许上传Excle文件
+            ,multiple: true
             ,done: function(res){
-                console.log(res)
+                console.log(res);
+                if(res.code == "2001"){
+                    Feng.error("上传失败！文件不能为空" );
+                }else{
+                    Feng.success("上传成功！");
+                    admin.putTempData('formOk', true);
+                    //关掉对话框
+                    admin.closeThisDialog();
+                }
             }
         });
     });

@@ -10,13 +10,14 @@
         <result column="people_dept" property="peopleDept" />
         <result column="people_type" property="peopleType" />
         <result column="people_sex" property="peopleSex" />
+        <result column="people_openid" property="peopleOpenId" />
         <result column="create_time" property="createTime" />
 
     </resultMap>
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
-         people_id AS "peopleId", people_name AS "peopleName", people_identify AS "peopleIdentify", people_dept AS "peopleDept", people_type AS "peopleType",people_sex AS "peopleSex"
+         people_id AS "peopleId", people_name AS "peopleName", people_openid AS "peopleOpenId" , people_identify AS "peopleIdentify", people_dept AS "peopleDept", people_type AS "peopleType",people_sex AS "peopleSex"
     </sql>
 
     <sql id="Base_Column_List_With_Pwd">

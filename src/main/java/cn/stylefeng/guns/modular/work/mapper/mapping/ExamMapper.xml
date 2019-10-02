@@ -14,7 +14,7 @@
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
-         exam_id AS "examId", exam_name AS "examName",  exam_type AS "examType"
+         exam_id AS "examId", exam_name AS "examName",  exam_type AS "examType",create_time AS "createTime"
     </sql>
 
     <sql id="Base_Column_List_With_Pwd">

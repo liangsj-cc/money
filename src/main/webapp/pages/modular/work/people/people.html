@@ -6,14 +6,14 @@
 
 <div class="layui-fluid">
     <div class="layui-row layui-col-space15">
-        <div class="layui-col-sm12 layui-col-md3 layui-col-lg2">
+        <!--<div class="layui-col-sm12 layui-col-md3 layui-col-lg2">
             <div class="layui-card">
                 <div class="layui-card-body mini-bar">
                     <div class="ztree" id="deptTree"></div>
                 </div>
             </div>
-        </div>
-        <div class="layui-col-sm12 layui-col-md9 layui-col-lg10">
+        </div>-->
+        <div class="layui-col-sm12 layui-col-md12 layui-col-lg12">
             <div class="layui-card">
                 <div class="layui-card-body">
                     <div class="layui-form toolbar">
@@ -45,18 +45,13 @@
 </div>
 
 <script type="text/html" id="tableBar">
-    @if(shiro.hasPermission("/mgr/edit")){
-    <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="edit">修改</a>
-    @}
+
+   <!-- <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="edit">修改</a>-->
+
     @if(shiro.hasPermission("/mgr/delete")){
     <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="delete">删除</a>
     @}
-    @if(shiro.hasPermission("/mgr/setRole")){
-    <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="roleAssign">分配角色</a>
-    @}
-    @if(shiro.hasPermission("/mgr/reset")){
-    <a class="layui-btn layui-btn-xs" lay-event="reset">重置密码</a>
-    @}
+
 </script>
 
 <script type="text/html" id="statusTpl">

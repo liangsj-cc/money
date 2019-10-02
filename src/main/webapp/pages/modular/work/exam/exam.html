@@ -12,8 +12,12 @@
                     <div class="layui-form toolbar">
                         <div class="layui-form-item">
                             <div class="layui-inline">
-                                <input id="condition" class="layui-input" type="text" placeholder="通知名称"/>
-                            </div>
+                                <input id="examName" class="layui-input" type="text" placeholder="题目"/>
+
+                            </div><div class="layui-inline">
+
+                            <input id="examType" class="layui-input" type="text" placeholder="题目类型"/>
+                        </div>
                             <div class="layui-inline">
                                 <button id="btnSearch" class="layui-btn icon-btn"><i class="layui-icon">&#xe615;</i>搜索</button>
                                 @if(shiro.hasPermission("/notice/add")){
@@ -22,7 +26,7 @@
                             </div>
                         </div>
                     </div>
-                    <table class="layui-table" id="examTable" lay-filter="noticeTable"></table>
+                    <table class="layui-table" id="examTable" lay-filter="examTable"></table>
                 </div>
             </div>
         </div>
