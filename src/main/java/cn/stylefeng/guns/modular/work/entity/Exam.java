@@ -32,17 +32,7 @@ public class Exam implements Serializable {
     @TableField("exam_name")
     private String examName;
 
-    /**
-     * 选项
-     */
-    @TableField("exam_option")
-    private String examOption;
 
-    /**
-     * 答案
-     */
-    @TableField("exam_answer")
-    private String examAnswer;
 
     /**
      * 题目类型（也就是工种类型）

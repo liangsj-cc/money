@@ -54,7 +54,7 @@ public enum BizExceptionEnum implements AbstractBaseExceptionEnum {
      * 账户问题
      */
     NOT_LOGIN(401, "当前用户未登录"),
-    USER_ALREADY_REG(401, "该用户已经注册"),
+    USER_ALREADY_REG(401, "该人员已添加"),
     NO_THIS_USER(400, "没有此用户"),
     USER_NOT_EXISTED(400, "没有此用户"),
     ACCOUNT_FREEZED(401, "账号被冻结"),
@@ -86,6 +86,7 @@ public enum BizExceptionEnum implements AbstractBaseExceptionEnum {
      * 其他
      */
     AUTH_REQUEST_ERROR(400, "账号密码错误");
+
 
     BizExceptionEnum(int code, String message) {
         this.code = code;

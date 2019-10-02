@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.stylefeng.guns.modular.work.mapper.ExamMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="cn.stylefeng.guns.modular.work.entity.Exam">
+        <id column="exam_id" property="examId" />
+        <result column="exam_name" property="examName" />
+
+        <result column="exam_type" property="examType" />
+        <result column="create_time" property="createTime" />
+
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+         exam_id AS "examId", exam_name AS "examName",  exam_type AS "examType"
+    </sql>
+
+    <sql id="Base_Column_List_With_Pwd">
+		 user_id AS "userId", avatar AS "avatar", account AS "account", salt AS "salt", password AS "password", name AS "name", birthday AS "birthday", sex AS "sex", email AS "email", phone AS "phone", role_id AS "roleId", dept_id AS "deptId", status AS "status", create_time AS "createTime", create_user AS "createUser", update_time AS "updateTime", update_user AS "updateUser", version AS "version"
+	</sql>
+
+    <select id="selectExam" resultType="map">
+        select
+        <include refid="Base_Column_List"/>
+        from work_exam
+        where 1!= 0
+        <if test="examName != null and examName != ''">
+            and   exam_name like  '%${examName}%' <!--CONCAT('%',#{people_name,jdbcType=VARCHAR},'%'))-->
+        </if>
+        <if test="examType != null and examType != ''">
+            and   exam_type like  '%${examType}%' <!--CONCAT('%',#{people_dept,jdbcType=VARCHAR},'%'))-->
+        </if>
+
+    </select>
+
+
+</mapper>
