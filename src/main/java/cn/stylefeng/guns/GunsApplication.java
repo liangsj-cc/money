@@ -46,7 +46,6 @@ public class GunsApplication {
 
     @Bean
     public WxMpService wxMpService() {
-
         WxMpService wxMpService = new WxMpServiceImpl();
         WxMpInMemoryConfigStorage wxMpInMemoryConfigStorage = new WxMpInMemoryConfigStorage();
         wxMpInMemoryConfigStorage.setAppId("wxda7b64f4a045e7a8");
