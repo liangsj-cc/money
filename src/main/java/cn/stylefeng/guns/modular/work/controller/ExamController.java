@@ -16,9 +16,7 @@ import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
@@ -71,8 +69,6 @@ public class ExamController extends BaseController {
     @ResponseBody
     public Object list(@RequestParam(required = false) String examName,
                        @RequestParam(required = false) String examType) {
-
-
         if (ShiroKit.isAdmin()) {
             Page<Map<String, Object>> peoples = examService.selectExam(null, examName, examType);
 
@@ -83,7 +79,6 @@ public class ExamController extends BaseController {
 
             return LayuiPageFactory.createPageInfo(peoples);
         }
-
     }
 
 
@@ -106,7 +101,7 @@ public class ExamController extends BaseController {
             String filedisplay = "习题导入模板.xls";
 
             filedisplay = URLEncoder.encode(filedisplay, "UTF-8");
-            response.addHeader("Content-Disposition", "attachment;filename="+ filedisplay);
+            response.addHeader("Content-Disposition", "attachment;filename=" + filedisplay);
 
             // 第二步，在webbook中添加一个sheet,对应Excel文件中的sheet
             Sheet sheet = workbook.createSheet("习题导入模板");
@@ -161,14 +156,11 @@ public class ExamController extends BaseController {
             row.createCell(5, Cell.CELL_TYPE_STRING).setCellValue("");
             row.createCell(6, Cell.CELL_TYPE_STRING).setCellValue("");
             // 第六步，将文件存到指定位置
-            try
-            {
+            try {
                 OutputStream out = response.getOutputStream();
                 workbook.write(out);
                 out.close();
-            }
-            catch (Exception e)
-            {
+            } catch (Exception e) {
                 e.printStackTrace();
             }
 
@@ -178,61 +170,60 @@ public class ExamController extends BaseController {
     }
 
     /**
-     *导入习题
+     * 导入习题
      */
     @RequestMapping("/importExcle")
     @ResponseBody
-    public Object uploadExcle(@RequestParam MultipartFile file){
-        if(file == null){
+    public Object uploadExcle(@RequestParam MultipartFile file) {
+        if (file == null) {
             return "2001";
         }
         String name = file.getOriginalFilename();
         long size = file.getSize();
-        if (name == null || ("").equals(name) && size == 0){
+        if (name == null || ("").equals(name) && size == 0) {
             return "2001";
         }
-        try{
+        try {
             HSSFWorkbook workbook = new HSSFWorkbook(file.getInputStream());
-            HSSFSheet sheet0=workbook.getSheetAt(0);
+            HSSFSheet sheet0 = workbook.getSheetAt(0);
             HSSFRow row0 = sheet0.getRow(0);
             sheet0.removeRow(row0);
             JSONObject json = new JSONObject();
-            for (Row row : sheet0){
+            for (Row row : sheet0) {
                 String name1 = row.getCell(0).getStringCellValue();
-                json.put("name",name1);
+                json.put("name", name1);
                 List<String> list = new ArrayList<>();
-                list.add("A."+row.getCell(1).getStringCellValue());
-                list.add("B."+row.getCell(2).getStringCellValue());
-                list.add("C."+row.getCell(3).getStringCellValue());
-                list.add("D."+row.getCell(4).getStringCellValue());
+                list.add("A." + row.getCell(1).getStringCellValue());
+                list.add("B." + row.getCell(2).getStringCellValue());
+                list.add("C." + row.getCell(3).getStringCellValue());
+                list.add("D." + row.getCell(4).getStringCellValue());
 
-                json.put("option",list);
+                json.put("option", list);
                 String answer = row.getCell(5).getStringCellValue();
-                Integer[] intArray0 = {1,1,1,1};
-               if("A".equals(answer.trim())){
-                   intArray0[0]=0;
-               }
-               if("B".equals(answer.trim())){
-                    intArray0[1]=0;
+                Integer[] intArray0 = {1, 1, 1, 1};
+                if ("A".equals(answer.trim())) {
+                    intArray0[0] = 0;
                 }
-               if("C".equals(answer.trim())){
-                    intArray0[2]=0;
+                if ("B".equals(answer.trim())) {
+                    intArray0[1] = 0;
                 }
-               if("D".equals(answer.trim())){
-                    intArray0[3]=0;
+                if ("C".equals(answer.trim())) {
+                    intArray0[2] = 0;
                 }
-                json.put("rights",intArray0);
+                if ("D".equals(answer.trim())) {
+                    intArray0[3] = 0;
+                }
+                json.put("rights", intArray0);
                 //解析成json后添加至数据库
-                examService.examAdd(json,  row.getCell(6).getStringCellValue());
+                examService.examAdd(json, row.getCell(6).getStringCellValue());
             }
-        }catch (Exception e){
+        } catch (Exception e) {
 
         }
         return SUCCESS_TIP;
     }
 
     /**
-     *
      * @param examId
      * @return
      */
@@ -241,6 +232,19 @@ public class ExamController extends BaseController {
     public Object delete(@RequestParam Long examId) {
         this.examService.removeById(examId);
         return SUCCESS_TIP;
+    }
+
+
+    @GetMapping("/day")
+    @ResponseBody
+    public Object examDay() {
+        return "day";
+    }
+
+    @GetMapping("/month")
+    @ResponseBody
+    public Object examMonth() {
+        return "montu";
     }
 
 }

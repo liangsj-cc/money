@@ -64,7 +64,19 @@ public interface Const {
 
     /**
      * 不需要权限验证的资源表达式
+     * /exam/day    题 目 当天题目
+     * /exam/month  题 目 当月题目
+     *
      */
-    List<String> NONE_PERMISSION_RES = CollectionUtil.newLinkedList("/assets/**", "/gunsApi/**", "/login", "/global/sessionError", "/kaptcha", "/error", "/global/error");
+    List<String> NONE_PERMISSION_RES = CollectionUtil.newLinkedList(
+            "/assets/**",
+            "/gunsApi/**",
+            "/login",
+            "/global/sessionError",
+            "/kaptcha",
+            "/error",
+            "/global/error",
+            "/exam/day",
+            "/exam/month");
 
 }

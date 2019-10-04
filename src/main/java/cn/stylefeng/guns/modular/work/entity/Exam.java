@@ -18,6 +18,7 @@ import java.util.Date;
 @TableName("work_exam")
 @Data
 public class Exam implements Serializable {
+
     private static final long serialVersionUID = 1L;
 
     /**

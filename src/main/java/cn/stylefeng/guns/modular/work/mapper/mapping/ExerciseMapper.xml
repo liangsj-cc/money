@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.stylefeng.guns.modular.work.mapper.ExerciseMapper">
+
+    <select id="selectExercise" resultType="cn.stylefeng.guns.modular.work.entity.Exercise">
+        SELECT
+        *
+        FROM
+        work_exercise AS w
+        WHERE
+        1=1
+        <foreach collection="condition.entrySet()" item="item" index="key">
+            <if test="key!=null and key!= ''">
+                and JSON_EXTRACT(w.label, CONCAT('$.','"${key}"')) = #{item}
+            </if>
+        </foreach>
+    </select>
+
+</mapper>
