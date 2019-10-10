@@ -1,0 +1,31 @@
+@layout("/common/_container.html",{bg:"bg-white",js:["/assets/modular/work/monthtest/monthtest_add.js"]}){
+
+
+    <div style="margin-top: 20px; margin-left: 30px;">
+        <div class="layui-col-xs4">
+            <div class="grid-demo">
+                <button class="layui-btn layui-btn-warm layui-btn-radius" id="btnDowload" >模板下载</button>
+            </div>
+        </div>
+        <div class="layui-col-xs8">
+            <div class="grid-demo">
+                <button type="button" class="layui-btn" id="uploadExcel"><i class="layui-icon"></i>上传文件</button>
+            </div>
+        </div>
+    </div>
+
+<form id="userForm" lay-filter="userForm" class="layui-form model-form">
+
+
+
+
+
+
+
+    <div class="layui-form-item text-right">
+        <button class="layui-btn layui-btn-primary" type="button" ew-event="closeDialog">关闭</button>
+        <!--<button class="layui-btn" lay-filter="btnSubmit" lay-submit>保存</button>-->
+    </div>
+</form>
+
+@}

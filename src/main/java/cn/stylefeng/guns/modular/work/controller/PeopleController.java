@@ -32,6 +32,7 @@ import java.io.FileInputStream;
 import java.io.OutputStream;
 import java.net.URLEncoder;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -118,12 +119,12 @@ public class PeopleController extends BaseController {
     @RequestMapping("/add")
     @Permission(Const.ADMIN_NAME)
     @ResponseBody
-    public ResponseData add(@Valid People people, BindingResult result) {
+    public Map<String, Object> add(@Valid People people, BindingResult result) {
         if (result.hasErrors()) {
             throw new ServiceException(BizExceptionEnum.REQUEST_NULL);
         }
-        this.peopleService.peopleAdd(people);
-        return SUCCESS_TIP;
+        Map<String ,Object> map = this.peopleService.peopleAdd(people);
+        return map;
     }
 
     /**
@@ -230,26 +231,17 @@ public class PeopleController extends BaseController {
         if (name == null || ("").equals(name) && size == 0){
             return "2001";
         }
+        Map<String,Object> map = new HashMap<>();
         try{
-            HSSFWorkbook workbook = new HSSFWorkbook(file.getInputStream());
-            HSSFSheet sheet0=workbook.getSheetAt(0);
-            HSSFRow row0 = sheet0.getRow(0);
-            sheet0.removeRow(row0);
-            JSONObject json = new JSONObject();
-            for (Row row : sheet0){
-                People people = new People();
-                people.setPeopleName(row.getCell(0).getStringCellValue());
-                people.setPeopleIdentify(row.getCell(1).getStringCellValue());
-                people.setPeopleSex(row.getCell(2).getStringCellValue());
-                people.setPeopleDept(row.getCell(3).getStringCellValue());
-                people.setPeopleType(row.getCell(4).getStringCellValue());
-                //解析成json后添加至数据库
-                peopleService.peopleAdd(people);
-            }
+           map = peopleService.importExcle(file);
         }catch (Exception e){
 
         }
-        return SUCCESS_TIP;
+        if("ERROR".equals(map.get("code"))){
+            return map;
+        }else{
+            return SUCCESS_TIP;
+        }
     }
 
 }
