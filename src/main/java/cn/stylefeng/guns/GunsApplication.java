@@ -22,9 +22,11 @@ import me.chanjar.weixin.mp.api.impl.WxMpServiceImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.scheduling.annotation.EnableScheduling;
+import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
 /**
  * SpringBoot方式启动类
@@ -32,8 +34,9 @@ import org.springframework.scheduling.annotation.EnableScheduling;
  * @author stylefeng
  * @Date 2017/5/21 12:06
  */
-@SpringBootApplication(exclude = {WebAutoConfiguration.class})
+@SpringBootApplication
 @EnableScheduling
+@EnableWebMvc
 public class GunsApplication {
 
     private final static Logger logger = LoggerFactory.getLogger(GunsApplication.class);
@@ -42,6 +45,7 @@ public class GunsApplication {
         SpringApplication.run(GunsApplication.class, args);
         logger.info(GunsApplication.class.getSimpleName() + " is success!");
     }
+
 
 
     @Bean
