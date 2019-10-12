@@ -70,7 +70,7 @@ layui.use(['layer', 'form', 'table', 'admin', 'ax'], function () {
     };
 
 
-    Exercise.openAddNotice = function () {
+    Exercise.openAddExercise = function () {
         admin.putTempData('formOk', false);
         top.layui.admin.open({
             type: 2,
@@ -84,16 +84,12 @@ layui.use(['layer', 'form', 'table', 'admin', 'ax'], function () {
     };
 
 
-    $("#labelInputAdd").click(function () {
-
-    })
-
     $("#btnSearch").click(function () {
         Exercise.search()
     })
 
     $('#btnImport').click(function () {
-        Exercise.openAddNotice();
+        Exercise.openAddExercise();
     });
 
 });

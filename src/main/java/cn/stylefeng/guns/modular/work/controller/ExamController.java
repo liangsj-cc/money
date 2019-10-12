@@ -1,18 +1,23 @@
 package cn.stylefeng.guns.modular.work.controller;
 
 
+import cn.hutool.core.util.StrUtil;
 import cn.stylefeng.guns.core.common.constant.factory.ConstantFactory;
 import cn.stylefeng.guns.core.common.page.LayuiPageFactory;
 
-import cn.stylefeng.guns.core.shiro.ShiroKit;
+
 import cn.stylefeng.guns.modular.work.entity.Exam;
 import cn.stylefeng.guns.modular.work.service.ExamService;
 import cn.stylefeng.guns.modular.work.warpper.ExamWrapper;
 import cn.stylefeng.roses.core.base.controller.BaseController;
 import cn.stylefeng.roses.core.datascope.DataScope;
 
+import cn.stylefeng.roses.core.reqres.response.ResponseData;
 import cn.stylefeng.roses.kernel.model.page.PageResult;
 import com.alibaba.fastjson.JSONObject;
+import com.baomidou.mybatisplus.core.conditions.Wrapper;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.apache.poi.hssf.usermodel.HSSFRow;
@@ -59,8 +64,18 @@ public class ExamController extends BaseController {
 
     @RequestMapping("list")
     @ResponseBody
-    public Object list() {
-        IPage<Exam> examPage = examService.page(LayuiPageFactory.defaultPage());
+    public Object list(@RequestParam(required = false) String name,
+                       @RequestParam(required = false) String type
+    ) {
+        LambdaQueryWrapper<Exam> lw = new LambdaQueryWrapper<>();
+        if (name != null) {
+            lw.like(Exam::getName, name);
+        }
+
+        if (StrUtil.isNotBlank(type)) {
+            lw.eq(Exam::getType, type);
+        }
+        IPage<Exam> examPage = examService.page(LayuiPageFactory.defaultPage(), lw);
         examPage.getRecords().forEach(
                 item ->
                         item.set("deptName",
@@ -68,6 +83,19 @@ public class ExamController extends BaseController {
                         )
         );
         return LayuiPageFactory.createPageInfo(examPage);
+    }
+
+
+    @GetMapping("/add")
+    public String addView() {
+        return PREFIX + "exam_add.html";
+    }
+
+    @RequestMapping("/add/json")
+    @ResponseBody
+    public ResponseData addExam(Exam exam){
+        examService.save(exam);
+        return SUCCESS_TIP;
     }
 
     @GetMapping("/day")

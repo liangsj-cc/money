@@ -22,12 +22,21 @@ layui.use(['layer', 'form', 'table', 'admin', 'ax'], function () {
             {field: 'selector', sort: true, title: '题目选择'},
             {field: 'deptName', sort: true, title: '部门'},
             {field: 'createTime', sort: true, title: '创建时间'},
-            {field:'num',sort:true,title:'题目个数'},
-            {field:'typeName',sort:true,title:'考试类型'},
+            {field: 'num', sort: true, title: '题目个数'},
+            {field: 'type', sort: true, templet: '#type', title: '考试类型'},
             {align: 'center', toolbar: '#tableBar', title: '操作', minWidth: 200}
         ]];
     };
 
+
+    Exam.search = function () {
+        let queryData = {
+            name: $("#examName").val(),
+            type: $("#examType option:selected").val()
+        };
+        console.log(queryData)
+        table.reload(Exam.tableId, {where: queryData});
+    }
 
     // 渲染表格
     var tableResult = table.render({
@@ -38,5 +47,43 @@ layui.use(['layer', 'form', 'table', 'admin', 'ax'], function () {
         cellMinWidth: 100,
         cols: Exam.initColumn()
     });
+    Exam.onAddExam = () => {
+        admin.putTempData('formOk', false);
+        top.layui.admin.open({
+            type: 2,
+            title: '添加考试',
+            content: Feng.ctxPath + '/exam/add',
+            area: ['360px', '600px'],
+            end: function () {
+                admin.getTempData('formOk') && table.reload(Exam.tableId);
+            }
+        });
 
+    }
+
+    $("#btnSearch").click(() => {
+        Exam.search()
+    })
+
+    $("#btnAdd").click(() => {
+        Exam.onAddExam()
+    })
+
+    Exam.onDeleteExam = (data) => {
+        console.log(data)
+    }
+    Exam.onEditExam = (data) => {
+        console.log(data)
+    }
+
+    table.on('tool(' + Exam.tableId + ')', function (obj) {
+        var data = obj.data;
+        var layEvent = obj.event;
+
+        if (layEvent === 'edit') {
+            Exam.onEditExam(data);
+        } else if (layEvent === 'delete') {
+            Exam.onDeleteExam(data);
+        }
+    });
 });

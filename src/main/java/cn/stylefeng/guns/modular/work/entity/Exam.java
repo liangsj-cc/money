@@ -23,24 +23,7 @@ import java.util.Map;
  */
 @TableName("work_exam")
 @Data
-@JsonInclude(JsonInclude.Include.NON_NULL)
-public class Exam   {
-
-    @TableField(exist = false)
-    private Map<String, Object> tails;
-
-    @JsonAnyGetter
-    private Map<String, Object> getTails() {
-        return this.tails;
-    }
-
-    public void set(String key, Object value) {
-        if (this.tails == null) {
-            this.tails = new HashMap<>();
-        }
-        this.tails.put(key, value);
-    }
-
+public class Exam  extends Bas  {
 
     /**
      * 主键id
@@ -55,7 +38,8 @@ public class Exam   {
     private String name;
 
     /**
-     * 题目类型（也就是工种类型）
+     *  type : 题目类型 0日考 1 月考
+     *
      */
     @TableField("type")
     private String type;
