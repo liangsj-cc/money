@@ -56,18 +56,13 @@ layui.use(['layer', 'form', 'admin', 'laydate', 'ax'], function () {
     // 表单提交事件
     form.on('submit(btnSubmit)', function (data) {
         var ajax = new $ax(Feng.ctxPath + "/people/add", function (data) {
+            Feng.success("添加成功！");
 
-            if(data.code=="ERROR"){
-                Feng.error("人员"+data.peopleName+"已存在!");
-                table.reload(MgrUser.tableId);
-            }else{
-                Feng.success("添加成功！");
-                //传给上个页面，刷新table用
-                admin.putTempData('formOk', true);
-                //关掉对话框
-                admin.closeThisDialog();
-            }
+            //传给上个页面，刷新table用
+            admin.putTempData('formOk', true);
 
+            //关掉对话框
+            admin.closeThisDialog();
         }, function (data) {
             Feng.error("添加失败！" + data.responseJSON.message)
         });
@@ -98,10 +93,7 @@ layui.use(['layer', 'form', 'admin', 'laydate', 'ax'], function () {
                 console.log(res);
                 if(res.code == "2001"){
                     Feng.error("上传失败！文件不能为空" );
-                }else if (res.code=="ERROR"){
-                    Feng.error("人员"+res.peopleName+"已存在！请修改数据重新导入");
-                    table.reload(MgrUser.tableId);
-                } else{
+                }else{
                     Feng.success("上传成功！");
                     admin.putTempData('formOk', true);
                     //关掉对话框

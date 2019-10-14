@@ -75,6 +75,8 @@ public class MonthTestPeopleController extends BaseController {
             Row row = sheet.createRow(0);
             // 第四步，创建单元格，并设置值表头 设置表头居中
             CellStyle style = workbook.createCellStyle();
+            DataFormat format = workbook.createDataFormat();
+            style.setDataFormat(format.getFormat("@"));
             style.setAlignment(CellStyle.ALIGN_CENTER); // 创建一个居中格式
 
             Cell cell = row.createCell(0);
@@ -85,6 +87,7 @@ public class MonthTestPeopleController extends BaseController {
             cell = row.createCell(1);
             cell.setCellValue("身份证号");
             cell.setCellStyle(style);
+
             sheet.setColumnWidth(1, (20 * 256));  //设置列宽，50个字符宽
 
             cell = row.createCell(2);

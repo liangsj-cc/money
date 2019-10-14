@@ -53,7 +53,7 @@
     <select id="selectPeopleIsTrue" resultType="int">
         select
         count(1)
-        from work_month_test where people_identify = #{peopleIdentity}
+        from work_people where people_identify = #{peopleIdentity}
     </select>
 
 </mapper>

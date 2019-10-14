@@ -43,33 +43,33 @@ public class MonthTestPeopleService extends ServiceImpl<MonthTestPeopleMapper, M
         Map<String,Object> map = new HashMap<>();
         HSSFWorkbook workbook = new HSSFWorkbook();
         try {
-             workbook = new HSSFWorkbook(file.getInputStream());
+            workbook = new HSSFWorkbook(file.getInputStream());
         }catch (Exception e){
 
         }
-            HSSFSheet sheet0 = workbook.getSheetAt(0);
-            HSSFRow row0 = sheet0.getRow(0);
-            sheet0.removeRow(row0);
-            for (Row row : sheet0) {
-                String peopleIdentityId = row.getCell(1).getStringCellValue();
-                boolean isTrue = this.selectPeopleIsTrue(peopleIdentityId);
-                if (!isTrue) {
-                    map.put("code", "ERROR");
-                    map.put("peopleName", row.getCell(0).getStringCellValue());
-                    return map;
-                } else {
-                    MonthTestPeople mt = new MonthTestPeople();
-                    mt.setPeopleName(row.getCell(0).getStringCellValue());
-                    mt.setPeopleIdentify(row.getCell(1).getStringCellValue());
-                    Cell cell0 = row.getCell(2);
-                    cell0.setCellType(Cell.CELL_TYPE_STRING);
-                    String testtimeStr = cell0.getStringCellValue();
-                    DateTime dateTime = new DateTime(testtimeStr, "yyyyMMdd");
-                    mt.setTestTime(dateTime.toTimestamp());
-                    mt.setCreateTime(new Date());
-                    this.save(mt);
-                }
+        HSSFSheet sheet0 = workbook.getSheetAt(0);
+        HSSFRow row0 = sheet0.getRow(0);
+        sheet0.removeRow(row0);
+        for (Row row : sheet0) {
+            String peopleIdentityId = row.getCell(1).getStringCellValue();
+            boolean isTrue = this.selectPeopleIsTrue(peopleIdentityId);
+            if (!isTrue) {
+                map.put("code", "ERROR");
+                map.put("peopleName", row.getCell(0).getStringCellValue());
+                return map;
+            } else {
+                MonthTestPeople mt = new MonthTestPeople();
+                mt.setPeopleName(row.getCell(0).getStringCellValue());
+                mt.setPeopleIdentify(row.getCell(1).getStringCellValue());
+                Cell cell0 = row.getCell(2);
+                cell0.setCellType(Cell.CELL_TYPE_STRING);
+                String testtimeStr = cell0.getStringCellValue();
+                DateTime dateTime = new DateTime(testtimeStr, "yyyyMMdd");
+                mt.setTestTime(dateTime.toTimestamp());
+                mt.setCreateTime(new Date());
+                this.save(mt);
             }
+        }
 
         map.put("code","SUCCESS");
 
@@ -80,12 +80,12 @@ public class MonthTestPeopleService extends ServiceImpl<MonthTestPeopleMapper, M
      * 查询身份证号码是否正确
      */
     public boolean selectPeopleIsTrue(String identityId){
-       Integer count = this.baseMapper.selectPeopleIsTrue( identityId);
-       if(count>=1){
-           return true;
-       }else{
-           return false;
-       }
+        Integer count = this.baseMapper.selectPeopleIsTrue( identityId);
+        if(count>=1){
+            return true;
+        }else{
+            return false;
+        }
     }
 }
 

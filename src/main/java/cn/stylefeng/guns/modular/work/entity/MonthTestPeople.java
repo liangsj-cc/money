@@ -4,7 +4,6 @@ import com.baomidou.mybatisplus.annotation.*;
 import lombok.Data;
 
 import java.io.Serializable;
-import java.sql.Timestamp;
 import java.util.Date;
 /**
  * <p>
@@ -38,10 +37,10 @@ public class MonthTestPeople implements Serializable {
     private String peopleIdentify;
 
     /**
-     * 月考时间
+     * 月考时间（比如说6月月考人员导入后，这个存进来的就是6）
      */
     @TableField("test_time")
-    private Timestamp testTime;
+    private Date testTime;
 
     /**
      * 创建时间
