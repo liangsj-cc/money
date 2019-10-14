@@ -15,6 +15,7 @@
  */
 package cn.stylefeng.guns.core.common.node;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 
 /**
@@ -34,6 +35,7 @@ public class ZTreeNode {
     /**
      * 父节点id
      */
+    @JsonProperty("pId")
     private Long pId;
 
     /**

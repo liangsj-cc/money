@@ -1,10 +1,16 @@
 package cn.stylefeng.guns.modular.work.entity;
 
+import cn.stylefeng.guns.modular.work.common.Bas;
 import com.baomidou.mybatisplus.annotation.*;
+import com.fasterxml.jackson.annotation.JsonAnyGetter;
+import com.fasterxml.jackson.annotation.JsonFilter;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
-import java.io.Serializable;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 
 /**
@@ -17,34 +23,41 @@ import java.util.Date;
  */
 @TableName("work_exam")
 @Data
-public class Exam implements Serializable {
-
-    private static final long serialVersionUID = 1L;
+public class Exam  extends Bas  {
 
     /**
      * 主键id
      */
-    @TableId(value = "exam_id", type = IdType.ID_WORKER)
-    private Long examId;
+    @TableId(value = "id", type = IdType.ID_WORKER)
+    private Long id;
 
     /**
-     * 题目
+     * 题目 试题名字
      */
-    @TableField("exam_name")
-    private String examName;
-
-
+    @TableField("name")
+    private String name;
 
     /**
-     * 题目类型（也就是工种类型）
+     *  type : 题目类型 0日考 1 月考
+     *
      */
-    @TableField("exam_type")
-    private String examType;
+    @TableField("type")
+    private String type;
 
     /**
      * 创建时间
      */
     @TableField(value = "create_time", fill = FieldFill.INSERT)
     private Date createTime;
+
+    @TableField(value = "selector")
+    private String selector;
+
+    @TableField(value = "dept_id")
+    private Long deptId;
+
+    // 题目个数
+    @TableField(value = "num")
+    private Integer num;
 
 }

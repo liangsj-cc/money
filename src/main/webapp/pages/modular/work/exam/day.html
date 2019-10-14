@@ -1,0 +1,70 @@
+@layout("/common/_container.html",{js:["/assets/modular/work/exam/day.js"]}){
+<style>
+    .exam-op span{
+        white-space: inherit
+    }
+    .exam-op div{
+        line-height: 18px;
+        color: #666;
+    }
+    .exam-op>div{
+        display: inline-flex;
+        margin-top: 10px;
+        margin-bottom: 5px;
+    }
+</style>
+<div class="layui-body-header">
+    <span class="layui-body-header-title">每日一练</span>
+</div>
+<div class="layui-fluid">
+    <div class="layui-row layui-col-space15">
+        <div class="layui-col-lg12">
+            <div class="layui-card">
+                <div class="layui-card-body">
+
+                    <div class="layui-progress layui-progress-big" lay-showpercent="true">
+                        <div class="layui-progress-bar" lay-percent="5 / 10"></div>
+                    </div>
+
+                    <form class="layui-form">
+                        <hr/>
+                        <div class="layui-form-item">
+                            <p>
+                                全部中文全部中文全部中文全部中文全部中文全部中文全部中文全部中文全部中文全部中文全部中文全部中文全部中文
+                            </p>
+                            <div class="exam-op">
+                                <input type="checkbox" name="like1[write]" lay-skin="primary"
+                                       title="全部中文全部中文全部中文全部中文全部中文全部中文全部中文全部中文全部中文全部中文全部中文全部中文全部中文" checked=""><br/>
+                                <input type="checkbox" name="like1[read]" lay-skin="primary"
+                                       title="111"><br/>
+                                <input type="checkbox" name="like1[game]" lay-skin="primary"
+                                       title="222" checked=""><br/>
+                            </div>
+                        </div>
+                        <hr/>
+
+                        <div class="layui-form-item">
+                            <p>
+                                全部中文全部中文全部中文全部中文全部中文全部中文全部中文全部中文全部中文全部中文全部中文全部中文全部中文
+                            </p>
+                            <div class="exam-op">
+                                <input type="radio" name="like1s" lay-skin="primary"
+                                       title="全部中文全部中文全部中文全部中文全部中文全部中文全部中文全部中文全部中文全部中文全部中文全部中文全部中文" checked=""><br/>
+                                <input type="radio" name="like1s" lay-skin="primary"
+                                       title="2"><br/>
+                                <input type="radio" name="like1s" lay-skin="primary"
+                                       title="3" checked=""><br/>
+                            </div>
+                        </div>
+                        <hr/>
+
+                    </form>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@}
