@@ -49,7 +49,7 @@ public enum BizExceptionEnum implements AbstractBaseExceptionEnum {
     CANT_DELETE_ADMIN(600, "不能删除超级管理员"),
     CANT_FREEZE_ADMIN(600, "不能冻结超级管理员"),
     CANT_CHANGE_ADMIN(600, "不能修改超级管理员角色"),
-
+    CANT_ADD_EXAM_DEPT_HAS_EXAM(600, "一个部门只能添加一种类型的试卷"),
     /**
      * 账户问题
      */

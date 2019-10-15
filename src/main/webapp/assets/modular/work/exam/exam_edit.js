@@ -1,6 +1,3 @@
-/**
- * 用户详情对话框
- */
 var UserInfoDlg = {
     data: {
         deptId: "",
@@ -19,6 +16,22 @@ layui.use(['layer', 'form', 'admin', 'laydate', 'ax'], function () {
     // 让当前iframe弹层高度适应
     admin.iframeAuto();
 
+    var ajax = new $ax(Feng.ctxPath + "/exam/getExamInfo?id=" + Feng.getUrlParam("id"));
+    var result = ajax.start();
+    let res = {...result.data}
+    let sejson = JSON.parse(res.selector)
+    console.log(sejson)
+    let toForm = Object.keys(sejson).map((i, index) => {
+        let a = {}
+        a[`key-${index}`] = i
+        a[`val-${index}`] = sejson[i]
+        return a
+    }).flat(0)
+        .reduce((a, b) => {
+            return {...a, ...b}
+        })
+    form.val('examForm', {...res, ...toForm});
+
 
     $('#deptName').click(function () {
         var formName = encodeURIComponent("parent.UserInfoDlg.data.deptName");
@@ -28,19 +41,19 @@ layui.use(['layer', 'form', 'admin', 'laydate', 'ax'], function () {
         layer.open({
             type: 2,
             title: '部门选择',
-            area: ['300px', '300px'],
+            area: ['300px', '400px'],
             content: Feng.ctxPath + '/system/commonTree?formName=' + formName + "&formId=" + formId + "&treeUrl=" + treeUrl,
             end: function () {
+                console.log(UserInfoDlg.data);
                 $("#deptId").val(UserInfoDlg.data.deptId);
                 $("#deptName").val(UserInfoDlg.data.deptName);
             }
         });
     });
 
-
     form.on('submit(btnSubmit)', function (data) {
         console.log(data.field)
-        let ajax = new $ax(Feng.ctxPath + "/exam/add/json", function (data) {
+        let ajax = new $ax(Feng.ctxPath + "/exam/edit/json", function (data) {
             Feng.success("添加成功！");
             //传给上个页面，刷新table用
             admin.putTempData('formOk', true);
@@ -63,7 +76,9 @@ layui.use(['layer', 'form', 'admin', 'laydate', 'ax'], function () {
         }
 
         data.field.selector = JSON.stringify(selector)
+        console.log(data.field)
         ajax.set(data.field);
         ajax.start();
     });
-});
+
+})

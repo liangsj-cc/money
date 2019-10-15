@@ -19,7 +19,7 @@ layui.use(['layer', 'form', 'table', 'admin', 'ax'], function () {
             {type: 'checkbox'},
             {field: 'id', hide: true, sort: true, title: 'id'},
             {field: 'name', sort: true, title: '标题'},
-            {field: 'selector', sort: true, title: '题目选择'},
+            {field: 'selector', templet: "#selector", title: '题目选择'},
             {field: 'deptName', sort: true, title: '部门'},
             {field: 'createTime', sort: true, title: '创建时间'},
             {field: 'num', sort: true, title: '题目个数'},
@@ -70,10 +70,29 @@ layui.use(['layer', 'form', 'table', 'admin', 'ax'], function () {
     })
 
     Exam.onDeleteExam = (data) => {
-        console.log(data)
+        var operation = function () {
+            var ajax = new $ax(Feng.ctxPath + "/exam/delete", function () {
+                table.reload(Exam.tableId);
+                Feng.success("删除成功!");
+            }, function (data) {
+                Feng.error("删除失败!" + data.responseJSON.message + "!");
+            });
+            ajax.set("id", data.id);
+            ajax.start();
+        };
+        Feng.confirm("是否删除习题" + data.name + "?", operation);
+
     }
     Exam.onEditExam = (data) => {
-        console.log(data)
+        admin.putTempData('formOk', false);
+        top.layui.admin.open({
+            type: 2,
+            title: '编辑用户',
+            content: Feng.ctxPath + '/exam/exam_edit?id=' + data.id,
+            end: function () {
+                admin.getTempData('formOk') && table.reload(Exam.tableId);
+            }
+        });
     }
 
     table.on('tool(' + Exam.tableId + ')', function (obj) {

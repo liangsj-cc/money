@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.lang.reflect.Executable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -20,7 +21,13 @@ public class ExerciseService extends ServiceImpl<ExerciseMapper, Exercise> {
     @Resource
     ExerciseMapper exerciseMapper;
 
-    public Page<Exercise> exercisePage(Page page,Map map) {
+    public Page<Exercise> exercisePage(Page page, Map map) {
         return exerciseMapper.selectExercise(page, map);
     }
+
+    public List<Exercise> selectByUserAndType(Map map, Integer num) {
+
+        return exerciseMapper.exerciseMapper(map, num);
+    }
+
 }

@@ -237,8 +237,6 @@ public class WebConfig implements WebMvcConfigurer {
         objectMapper.registerModule(simpleModule);
 
         jsonConverter.setObjectMapper(objectMapper);
-
-
         return jsonConverter;
     }
 

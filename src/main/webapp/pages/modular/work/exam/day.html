@@ -1,13 +1,15 @@
 @layout("/common/_container.html",{js:["/assets/modular/work/exam/day.js"]}){
 <style>
-    .exam-op span{
+    .exam-op span {
         white-space: inherit
     }
-    .exam-op div{
+
+    .exam-op div {
         line-height: 18px;
         color: #666;
     }
-    .exam-op>div{
+
+    .exam-op > div {
         display: inline-flex;
         margin-top: 10px;
         margin-bottom: 5px;
@@ -22,42 +24,40 @@
             <div class="layui-card">
                 <div class="layui-card-body">
 
+
                     <div class="layui-progress layui-progress-big" lay-showpercent="true">
-                        <div class="layui-progress-bar" lay-percent="5 / 10"></div>
+                        <div class="layui-progress-bar" lay-percent="0 / ${es.~size}"></div>
                     </div>
-
-                    <form class="layui-form">
+                    <div style="text-align: center">${exam.name} 共${es.~size}道题</div>
+                    <form lay-filter="exam-day" class="layui-form" >
                         <hr/>
+                        @for(ex in es){
                         <div class="layui-form-item">
                             <p>
-                                全部中文全部中文全部中文全部中文全部中文全部中文全部中文全部中文全部中文全部中文全部中文全部中文全部中文
+                                ${exLP.index}.${ex.name}
                             </p>
                             <div class="exam-op">
-                                <input type="checkbox" name="like1[write]" lay-skin="primary"
-                                       title="全部中文全部中文全部中文全部中文全部中文全部中文全部中文全部中文全部中文全部中文全部中文全部中文全部中文" checked=""><br/>
-                                <input type="checkbox" name="like1[read]" lay-skin="primary"
-                                       title="111"><br/>
-                                <input type="checkbox" name="like1[game]" lay-skin="primary"
-                                       title="222" checked=""><br/>
+                                @var ops = exops[exLP.index-1];
+                                @for( op in ops ){
+                                @if( rig[exLP.index-1] ){
+                                <input type="checkbox" value="${opLP.index-1}" name="${ex.id}[${opLP.index-1}]"
+                                       lay-skin="primary"
+                                       title="${op}"><br/>
+                                @}else{
+                                <input type="radio" name="${ex.id}" value="${opLP.index-1}" lay-skin="primary"
+                                       title="${op}"><br/>
+                                @}
+                                @}
                             </div>
                         </div>
                         <hr/>
-
+                        @}
                         <div class="layui-form-item">
-                            <p>
-                                全部中文全部中文全部中文全部中文全部中文全部中文全部中文全部中文全部中文全部中文全部中文全部中文全部中文
-                            </p>
-                            <div class="exam-op">
-                                <input type="radio" name="like1s" lay-skin="primary"
-                                       title="全部中文全部中文全部中文全部中文全部中文全部中文全部中文全部中文全部中文全部中文全部中文全部中文全部中文" checked=""><br/>
-                                <input type="radio" name="like1s" lay-skin="primary"
-                                       title="2"><br/>
-                                <input type="radio" name="like1s" lay-skin="primary"
-                                       title="3" checked=""><br/>
+                            <div class="layui-input-block">
+                                <button class="layui-btn" lay-filter="btnSubmit" lay-submit>保存</button>
+                                <button type="reset" class="layui-btn layui-btn-primary">重置</button>
                             </div>
                         </div>
-                        <hr/>
-
                     </form>
 
                 </div>

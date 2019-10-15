@@ -43,6 +43,7 @@
     <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="delete">删除</a>
 </script>
 
+
 <script type="text/html" id="type">
     {{# if(d.type === '0') { }}
     <span class="layui-badge">日考</span>
@@ -50,4 +51,14 @@
     <span class="layui-badge layui-bg-green">月考</span>
     {{# } }}
 </script>
+
+<script type="text/html" id="selector">
+    {{#  let labels = JSON.parse(d.selector) }}
+    {{#  for(let key in labels){ }}
+    <span class="layui-badge layui-bg-green">
+            {{key}}={{labels[key]}}<br/>
+        </span>
+    {{# } }}
+</script>
+
 @}

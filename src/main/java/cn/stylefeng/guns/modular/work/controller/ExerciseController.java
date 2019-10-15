@@ -171,7 +171,7 @@ public class ExerciseController extends BaseController {
                 JSONArray options = new JSONArray();
 
                 opHeaders.forEach((i, item) -> {
-                    options.add(item+"."+row.getCell(i).getStringCellValue());
+                    options.add(item + "." + row.getCell(i).getStringCellValue());
                 });
 
                 exercise.setOptions(options.toJSONString());
@@ -186,9 +186,10 @@ public class ExerciseController extends BaseController {
                         .map(h -> strings.contains(h) ? 1 : 0)
                         .forEach(rights::add);
 
-                exercise.setRights(rights.toJSONString());
-
-                exercises.add(exercise);
+                if (rights.stream().mapToLong(value -> (long) value).sum() > 0) {
+                    exercise.setRights(rights.toJSONString());
+                    exercises.add(exercise);
+                }
                 //解析成json后添加至数据库
             }
             exerciseService.saveBatch(exercises);

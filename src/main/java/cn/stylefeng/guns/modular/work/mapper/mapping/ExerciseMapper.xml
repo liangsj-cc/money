@@ -15,4 +15,23 @@
             </if>
         </foreach>
     </select>
+
+    <select id="exerciseMapper" resultType="cn.stylefeng.guns.modular.work.entity.Exercise">
+        SELECT
+        w.*,
+        RAND( ) AS r
+        FROM
+        work_exercise AS w
+        WHERE
+        1 = 1
+        <foreach collection="selector.entrySet()" item="item" index="key">
+            <if test="key!=null and key!= ''">
+                and JSON_EXTRACT(w.label, CONCAT('$.','"${key}"')) = #{item}
+            </if>
+        </foreach>
+        ORDER BY
+        r
+        LIMIT 0,
+        #{num}
+    </select>
 </mapper>
