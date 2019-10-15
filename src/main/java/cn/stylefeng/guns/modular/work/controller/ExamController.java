@@ -160,6 +160,8 @@ public class ExamController extends BaseController {
         return ResponseData.success(exam);
     }
 
+
+
     @GetMapping("/day")
     public String examDay(Model model) {
 

@@ -18,6 +18,7 @@
 <div class="layui-body-header">
     <span class="layui-body-header-title">每日一练</span>
 </div>
+<input name="essize" type="hidden" id="essize" value="${es.~size}">
 <div class="layui-fluid">
     <div class="layui-row layui-col-space15">
         <div class="layui-col-lg12">
@@ -25,11 +26,11 @@
                 <div class="layui-card-body">
 
 
-                    <div class="layui-progress layui-progress-big" lay-showpercent="true">
-                        <div class="layui-progress-bar" lay-percent="0 / ${es.~size}"></div>
+                    <div class="layui-progress layui-progress-big" lay-filter="exam-progress" lay-showpercent="true">
+                        <div class="layui-progress-bar" id="pro" lay-percent="0 / ${es.~size}"></div>
                     </div>
                     <div style="text-align: center">${exam.name} 共${es.~size}道题</div>
-                    <form lay-filter="exam-day" class="layui-form" >
+                    <form lay-filter="exam-day" class="layui-form">
                         <hr/>
                         @for(ex in es){
                         <div class="layui-form-item">

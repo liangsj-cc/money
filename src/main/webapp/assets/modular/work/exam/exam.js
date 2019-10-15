@@ -34,7 +34,6 @@ layui.use(['layer', 'form', 'table', 'admin', 'ax'], function () {
             name: $("#examName").val(),
             type: $("#examType option:selected").val()
         };
-        console.log(queryData)
         table.reload(Exam.tableId, {where: queryData});
     }
 
