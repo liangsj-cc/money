@@ -103,6 +103,23 @@ layui.use(['layer', 'form', 'table', 'ztree', 'laydate', 'admin', 'ax'], functio
     };
 
     /**
+     * 用户导入
+     * @constructor
+     */
+    MgrUser.InexportExcel = function () {
+        admin.putTempData('formOk', false);
+        top.layui.admin.open({
+            type: 2,
+            title: '批量导入人员',
+            content: Feng.ctxPath + '/mgr/user_import',
+            area: ['600px', '480px'],
+            end: function () {
+                admin.getTempData('formOk') && table.reload(MgrUser.tableId);
+            }
+        });
+    };
+
+    /**
      * 点击删除用户按钮
      *
      * @param data 点击按钮时候的行数据
@@ -218,6 +235,10 @@ layui.use(['layer', 'form', 'table', 'ztree', 'laydate', 'admin', 'ax'], functio
     // 导出excel
     $('#btnExp').click(function () {
         MgrUser.exportExcel();
+    });
+    // 导入excel
+    $('#btnExpin').click(function () {
+        MgrUser.InexportExcel();
     });
 
     // 工具条点击事件

@@ -39,4 +39,10 @@ public interface DeptMapper extends BaseMapper<Dept> {
      * where pids like ''
      */
     List<Dept> likePids(@Param("deptId") Long deptId);
+
+    /**
+     * 根据部门名称查询部门id
+     * @param fullName
+     */
+    Dept getDeptByfullName(@Param("fullName") String fullName);
 }

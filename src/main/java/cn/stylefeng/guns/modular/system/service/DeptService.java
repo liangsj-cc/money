@@ -138,4 +138,16 @@ public class DeptService extends ServiceImpl<DeptMapper, Dept> {
             dept.setPids(pids + "[" + pid + "],");
         }
     }
+
+
+    /**
+     * 根据全称查询部门信息
+     * @param fullName
+     * @return
+     */
+    public Dept getDeptByfullName(String fullName){
+        Dept dept = this.baseMapper.getDeptByfullName(fullName);
+        return dept;
+    }
+
 }

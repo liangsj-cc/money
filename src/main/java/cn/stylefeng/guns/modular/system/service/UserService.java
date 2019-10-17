@@ -10,18 +10,29 @@ import cn.stylefeng.guns.core.shiro.ShiroKit;
 import cn.stylefeng.guns.core.shiro.ShiroUser;
 import cn.stylefeng.guns.core.shiro.service.UserAuthService;
 import cn.stylefeng.guns.core.util.ApiMenuFilter;
+import cn.stylefeng.guns.modular.system.entity.Dept;
 import cn.stylefeng.guns.modular.system.entity.User;
 import cn.stylefeng.guns.modular.system.factory.UserFactory;
 import cn.stylefeng.guns.modular.system.mapper.UserMapper;
 import cn.stylefeng.guns.modular.system.model.UserDto;
+import cn.stylefeng.guns.modular.work.entity.People;
 import cn.stylefeng.roses.core.datascope.DataScope;
 import cn.stylefeng.roses.kernel.model.exception.ServiceException;
+import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import org.apache.poi.hssf.usermodel.HSSFRow;
+import org.apache.poi.hssf.usermodel.HSSFSheet;
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.ss.usermodel.Row;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -42,6 +53,9 @@ public class UserService extends ServiceImpl<UserMapper, User> {
     @Autowired
     private UserAuthService userAuthService;
 
+    @Autowired
+    private DeptService deptService;
+
     /**
      * 添加用戶
      *
@@ -61,6 +75,25 @@ public class UserService extends ServiceImpl<UserMapper, User> {
         String password = ShiroKit.md5(user.getPassword(), salt);
 
         this.save(UserFactory.createUser(user, password, salt));
+    }
+
+    /**
+     * 添加用戶
+     *
+     * @author fengshuonan
+     * @Date 2018/12/24 22:51
+     */
+    public void addUser1(UserDto user) {
+
+        // 判断账号是否重复
+        User theUser = this.getByAccount(user.getAccount());
+        if (theUser == null) {
+            // 完善账号信息
+            String salt = ShiroKit.getRandomSalt(5);
+            String password = ShiroKit.md5(user.getPassword(), salt);
+            this.save(UserFactory.createUser(user, password, salt));
+        }
+
     }
 
     /**
@@ -216,4 +249,51 @@ public class UserService extends ServiceImpl<UserMapper, User> {
         BeanUtil.copyProperties(shiroUser, lastUser);
     }
 
+    /**
+     * 导入新用户信息
+     * @param file
+     * @return
+     */
+    @Transactional
+    public Map<String, Object> importExcle(MultipartFile file) {
+        Map<String ,Object> map = new HashMap<>();
+        try {
+            HSSFWorkbook workbook = new HSSFWorkbook(file.getInputStream());
+            HSSFSheet sheet0 = workbook.getSheetAt(0);
+            HSSFRow row0 = sheet0.getRow(0);
+            sheet0.removeRow(row0);
+            JSONObject json = new JSONObject();
+            for (Row row : sheet0) {
+                if(row.getCell(0)==null){
+                    break;
+                }
+                UserDto user = new UserDto();
+                user.setName(row.getCell(0).getStringCellValue());//姓名
+                user.setAccount(row.getCell(1).getStringCellValue());//身份证号
+                if (row.getCell(2).getStringCellValue().equals("男")) {//性别
+                    user.setSex("M");
+                } else {
+                    user.setSex("F");
+                }
+                user.setEmail(row.getCell(3).getStringCellValue());//邮箱
+                DecimalFormat format = new DecimalFormat("#");
+                Number value = row.getCell(4).getNumericCellValue();
+                String phone = format.format(value);
+                user.setPhone(phone);//手机号
+                String deptName = row.getCell(5).getStringCellValue();//部门名称
+                Dept dept = deptService.getDeptByfullName(deptName.trim());
+                if("".equals(dept.getDeptId())){
+                    throw new ServiceException(BizExceptionEnum.DEPT_ID_IS_NULL);
+                }
+                user.setPassword("123456");
+                user.setDeptId(dept.getDeptId());
+                user.setStatus("ENABLE");
+                //解析成json后添加至数据库
+                this.addUser1(user);
+            }
+        }catch (Exception e){
+            throw new ServiceException(BizExceptionEnum.USER_ALREADY_REG);
+        }
+        return map;
+    }
 }

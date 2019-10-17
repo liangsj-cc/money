@@ -61,4 +61,10 @@
         </if>
     </select>
 
+    <select id="getDeptByfullName" resultType="cn.stylefeng.guns.modular.system.entity.Dept">
+        select
+        <include refid="Base_Column_List"/>
+        from sys_dept where  full_name LIKE  CONCAT('%',#{fullName},'%')
+    </select>
+
 </mapper>
