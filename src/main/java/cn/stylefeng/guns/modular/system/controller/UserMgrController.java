@@ -491,23 +491,18 @@ public class UserMgrController extends BaseController {
     @ResponseBody
     public Object uploadExcle(@RequestParam MultipartFile file){
         if(file == null){
-            return "2001";
+            throw new ServiceException( BizExceptionEnum.FILE_NULL);
         }
         String name = file.getOriginalFilename();
         long size = file.getSize();
         if (name == null || ("").equals(name) && size == 0){
-            return "2001";
+            throw new ServiceException(BizExceptionEnum.FILE_NULL);
         }
-        Map<String,Object> map = new HashMap<>();
         try{
-            map = userService.importExcle(file);
+            userService.importExcle(file);
         }catch (Exception e){
-
+            throw new ServiceException(BizExceptionEnum.USER_INPORT_ERROR);
         }
-        if("ERROR".equals(map.get("code"))){
-            return map;
-        }else{
-            return SUCCESS_TIP;
-        }
+        return SUCCESS_TIP;
     }
 }

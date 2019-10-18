@@ -45,6 +45,12 @@ public class Score implements Serializable {
     @TableField("score_type")
     private String scoreType;
 
+     /**
+     * 考试分数（月考/日考）
+     */
+    @TableField("score")
+    private String score;
+
     /**
      * 考试时间
      */

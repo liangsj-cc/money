@@ -90,14 +90,16 @@ layui.use(['layer', 'form', 'admin', 'laydate', 'ax'], function () {
             ,multiple: true
             ,done: function(res){
                 console.log(res);
-                if(res.code == "2001"){
-                    Feng.error("上传失败！文件不能为空" );
-                }else{
-                    Feng.success("上传成功！");
-                    admin.putTempData('formOk', true);
-                    //关掉对话框
-                    admin.closeThisDialog();
-                }
+                Feng.success("上传成功！");
+                admin.putTempData('formOk', true);
+                //关掉对话框
+                admin.closeThisDialog();
+
+            }
+            ,error:function(res){
+                console.log(res);
+                Feng.error("导入失败！文件中身份证号错误或部门错误，请核查！" );
+                admin.closeThisDialog();
             }
         });
     });

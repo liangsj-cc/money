@@ -251,48 +251,51 @@ public class UserService extends ServiceImpl<UserMapper, User> {
 
     /**
      * 导入新用户信息
+     *
      * @param file
      * @return
      */
     @Transactional
     public Map<String, Object> importExcle(MultipartFile file) {
-        Map<String ,Object> map = new HashMap<>();
+        Map<String, Object> map = new HashMap<>();
         try {
             HSSFWorkbook workbook = new HSSFWorkbook(file.getInputStream());
             HSSFSheet sheet0 = workbook.getSheetAt(0);
             HSSFRow row0 = sheet0.getRow(0);
             sheet0.removeRow(row0);
-            JSONObject json = new JSONObject();
             for (Row row : sheet0) {
-                if(row.getCell(0)==null){
-                    break;
+                if (row.getCell(0) != null) {//空行不执行
+                    UserDto user = new UserDto();
+                    user.setName(row.getCell(0).getStringCellValue());//姓名
+                    String identityCard= row.getCell(1).getStringCellValue();
+                    if(identityCard.trim().length()!=18){
+                        throw new ServiceException(BizExceptionEnum.IDENTITYCARD_ERROR);
+                    }
+                    user.setAccount(identityCard);//身份证号
+                    if (row.getCell(2).getStringCellValue().equals("男")) {//性别
+                        user.setSex("M");
+                    } else {
+                        user.setSex("F");
+                    }
+                    user.setEmail(row.getCell(3).getStringCellValue());//邮箱
+                    DecimalFormat format = new DecimalFormat("#");
+                    Number value = row.getCell(4).getNumericCellValue();
+                    String phone = format.format(value);
+                    user.setPhone(phone);//手机号
+                    String deptName = row.getCell(5).getStringCellValue();//部门名称
+                    Dept dept = deptService.getDeptByfullName(deptName.trim());
+                    if ("".equals(dept.getDeptId())) {
+                        throw new ServiceException(BizExceptionEnum.DEPT_ID_IS_NULL);
+                    }
+                    user.setPassword("123456");
+                    user.setDeptId(dept.getDeptId());
+                    user.setStatus("ENABLE");
+                    //解析成json后添加至数据库
+                    this.addUser1(user);
                 }
-                UserDto user = new UserDto();
-                user.setName(row.getCell(0).getStringCellValue());//姓名
-                user.setAccount(row.getCell(1).getStringCellValue());//身份证号
-                if (row.getCell(2).getStringCellValue().equals("男")) {//性别
-                    user.setSex("M");
-                } else {
-                    user.setSex("F");
-                }
-                user.setEmail(row.getCell(3).getStringCellValue());//邮箱
-                DecimalFormat format = new DecimalFormat("#");
-                Number value = row.getCell(4).getNumericCellValue();
-                String phone = format.format(value);
-                user.setPhone(phone);//手机号
-                String deptName = row.getCell(5).getStringCellValue();//部门名称
-                Dept dept = deptService.getDeptByfullName(deptName.trim());
-                if("".equals(dept.getDeptId())){
-                    throw new ServiceException(BizExceptionEnum.DEPT_ID_IS_NULL);
-                }
-                user.setPassword("123456");
-                user.setDeptId(dept.getDeptId());
-                user.setStatus("ENABLE");
-                //解析成json后添加至数据库
-                this.addUser1(user);
             }
-        }catch (Exception e){
-            throw new ServiceException(BizExceptionEnum.USER_ALREADY_REG);
+        } catch (Exception e) {
+            throw new ServiceException(BizExceptionEnum.USER_INPORT_ERROR);
         }
         return map;
     }
