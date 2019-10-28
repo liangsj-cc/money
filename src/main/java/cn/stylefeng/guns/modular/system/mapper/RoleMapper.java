@@ -52,4 +52,11 @@ public interface RoleMapper extends BaseMapper<Role> {
      */
     List<ZTreeNode> roleTreeListByRoleId(Long[] roleId);
 
+
+    /**
+     * 获取角色id
+     * @param roleName
+     * @return
+     */
+    String getRoleIdByRoleName(@Param("role_Name")String roleName);
 }

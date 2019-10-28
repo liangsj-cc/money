@@ -184,4 +184,8 @@ public class RoleService extends ServiceImpl<RoleMapper, Role> {
         return this.baseMapper.roleTreeListByRoleId(roleId);
     }
 
+    public String getRoleIdByRoleName(String roleName){
+        String roleId = roleMapper.getRoleIdByRoleName(roleName);
+        return roleId;
+    }
 }

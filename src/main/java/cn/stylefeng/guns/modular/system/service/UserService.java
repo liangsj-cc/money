@@ -56,6 +56,9 @@ public class UserService extends ServiceImpl<UserMapper, User> {
     @Autowired
     private DeptService deptService;
 
+    @Autowired
+    private RoleService roleService;
+
     /**
      * 添加用戶
      *
@@ -282,7 +285,8 @@ public class UserService extends ServiceImpl<UserMapper, User> {
                     Number value = row.getCell(4).getNumericCellValue();
                     String phone = format.format(value);
                     user.setPhone(phone);//手机号
-                    user.setRoleId("1179295064636637186");//角色id
+                    String roleid = roleService.getRoleIdByRoleName("考试人员");
+                    user.setRoleId(roleid);//角色id
                     String deptName = row.getCell(5).getStringCellValue();//部门名称
                     Dept dept = deptService.getDeptByfullName(deptName.trim());
                     if ("".equals(dept.getDeptId())) {

@@ -79,5 +79,7 @@
         ) r1 ON r.role_id = r1.role_id
         ORDER BY pid,sort ASC
     </select>
-
+    <select id="getRoleIdByRoleName" resultType="string">
+        SELECT role_id FROM sys_role where name = #{role_Name}
+    </select>
 </mapper>
