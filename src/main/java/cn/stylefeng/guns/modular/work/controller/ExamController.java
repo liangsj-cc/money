@@ -8,8 +8,11 @@ import cn.stylefeng.guns.core.common.page.LayuiPageFactory;
 
 
 import cn.stylefeng.guns.core.shiro.ShiroKit;
+import cn.stylefeng.guns.core.shiro.ShiroUser;
 import cn.stylefeng.guns.modular.work.entity.Exam;
+import cn.stylefeng.guns.modular.work.entity.ExamHistory;
 import cn.stylefeng.guns.modular.work.entity.Exercise;
+import cn.stylefeng.guns.modular.work.service.ExamHistoryService;
 import cn.stylefeng.guns.modular.work.service.ExamService;
 import cn.stylefeng.guns.modular.work.service.ExerciseService;
 import cn.stylefeng.guns.modular.work.warpper.ExamWrapper;
@@ -53,6 +56,9 @@ public class ExamController extends BaseController {
     ExamService examService;
     @Autowired
     ExerciseService exerciseService;
+
+    @Autowired
+    ExamHistoryService examHistoryService;
 
     /**
      * 跳转到习题管理首页
@@ -165,7 +171,14 @@ public class ExamController extends BaseController {
     @GetMapping("/day")
     public String examDay(Model model) {
 
-        Long deptId = ShiroKit.getUserNotNull().getDeptId();
+        ShiroUser shiroUser =  ShiroKit.getUserNotNull();
+        Long deptId= shiroUser.getDeptId();
+        Long userId = shiroUser.getId();
+        examHistoryService.list(new LambdaQueryWrapper<ExamHistory>()
+                .eq(ExamHistory::getDeptId,deptId)
+                .eq(ExamHistory::getUserId,userId)
+        );
+
         Exam exam = examService.getOne(
                 new LambdaQueryWrapper<Exam>().eq(Exam::getDeptId, deptId).eq(Exam::getType,
                         "0"));
@@ -184,6 +197,7 @@ public class ExamController extends BaseController {
         model.addAttribute("exops", exops);
         model.addAttribute("rig", more);
         model.addAttribute("exam",exam);
+
         return PREFIX + "day.html";
     }
 
