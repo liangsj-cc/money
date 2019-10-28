@@ -83,7 +83,7 @@ public class UserService extends ServiceImpl<UserMapper, User> {
      * @author fengshuonan
      * @Date 2018/12/24 22:51
      */
-    public void addUser1(UserDto user) {
+    public void exportUser(UserDto user) {
 
         // 判断账号是否重复
         User theUser = this.getByAccount(user.getAccount());
@@ -282,6 +282,7 @@ public class UserService extends ServiceImpl<UserMapper, User> {
                     Number value = row.getCell(4).getNumericCellValue();
                     String phone = format.format(value);
                     user.setPhone(phone);//手机号
+                    user.setRoleId("1179295064636637186");
                     String deptName = row.getCell(5).getStringCellValue();//部门名称
                     Dept dept = deptService.getDeptByfullName(deptName.trim());
                     if ("".equals(dept.getDeptId())) {
@@ -291,7 +292,7 @@ public class UserService extends ServiceImpl<UserMapper, User> {
                     user.setDeptId(dept.getDeptId());
                     user.setStatus("ENABLE");
                     //解析成json后添加至数据库
-                    this.addUser1(user);
+                    this.exportUser(user);
                 }
             }
         } catch (Exception e) {
