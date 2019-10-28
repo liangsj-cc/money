@@ -453,11 +453,6 @@ public class UserMgrController extends BaseController {
             cell.setCellStyle(style);
             sheet.setColumnWidth(5, (15 * 256));  //设置列宽，50个字符宽
 
-            cell = row.createCell(6);
-            cell.setCellValue("工种类型");
-            cell.setCellStyle(style);
-            sheet.setColumnWidth(6, (15 * 256));  //设置列宽，50个字符宽
-
             // 第五步，写入实体数据 实际应用中这些数据从数据库得到
             row = sheet.createRow(1);
             row.createCell(0, Cell.CELL_TYPE_STRING).setCellValue("");
@@ -466,7 +461,6 @@ public class UserMgrController extends BaseController {
             row.createCell(3, Cell.CELL_TYPE_STRING).setCellValue("");
             row.createCell(4, Cell.CELL_TYPE_STRING).setCellValue("");
             row.createCell(5, Cell.CELL_TYPE_STRING).setCellValue("");
-            row.createCell(6, Cell.CELL_TYPE_STRING).setCellValue("");
             // 第六步，将文件存到指定位置
             try
             {
