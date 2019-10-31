@@ -24,7 +24,7 @@ public class Exercise extends Bas implements Serializable {
     String name;
     // 题目选项
     String options;
-    // 题目正确答案
+    // 题目正确答案  1 正确 0 错误
     String rights;
     // 题目
     String label;

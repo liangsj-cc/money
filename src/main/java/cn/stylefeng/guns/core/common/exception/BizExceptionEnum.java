@@ -89,7 +89,8 @@ public enum BizExceptionEnum implements AbstractBaseExceptionEnum {
      * 其他
      */
     AUTH_REQUEST_ERROR(400, "账号密码错误"),
-    FILE_NULL(400,"文件不能为空");
+    FILE_NULL(400,"文件不能为空"),
+    EXAM_COMP(400,"考试已完成");
 
     BizExceptionEnum(int code, String message) {
         this.code = code;

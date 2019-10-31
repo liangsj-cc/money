@@ -60,4 +60,5 @@ public class Exam  extends Bas  {
     @TableField(value = "num")
     private Integer num;
 
+
 }

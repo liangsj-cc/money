@@ -27,9 +27,15 @@ public class ExamHistory {
     @TableField("exam_type")
     private String type;
 
-
     @TableField(value = "create_time", fill = FieldFill.INSERT)
     private Date createTime;
 
+    @TableField(value = "answer")
+    private String answer;
 
+    @TableField(value="score")
+    private Long score;
+
+    @TableField(value="right_ids")
+    private String rightIds;
 }
