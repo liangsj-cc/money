@@ -51,6 +51,7 @@ layui.use(['layer', 'form', 'table', 'ztree', 'laydate', 'admin', 'ax'], functio
         queryData['deptId'] = MgrUser.condition.deptId;
         queryData['name'] = $("#name").val();
         queryData['timeLimit'] = $("#timeLimit").val();
+        queryData['examType'] = $("input[type='radio']").val();
         table.reload(MgrUser.tableId, {where: queryData});
     };
 

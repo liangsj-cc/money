@@ -31,10 +31,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.text.DecimalFormat;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * <p>
@@ -295,6 +292,7 @@ public class UserService extends ServiceImpl<UserMapper, User> {
                     user.setPassword("123456");
                     user.setDeptId(dept.getDeptId());
                     user.setStatus("ENABLE");
+                    user.setBirthday(new Date());
                     //解析成json后添加至数据库
                     this.exportUser(user);
                 }

@@ -6,6 +6,7 @@ import cn.stylefeng.guns.core.shiro.ShiroKit;
 import cn.stylefeng.guns.modular.system.warpper.UserWrapper;
 import cn.stylefeng.guns.modular.work.service.ExamScoreService;
 import cn.stylefeng.guns.modular.work.service.ExamService;
+import cn.stylefeng.guns.modular.work.warpper.ExamScoreWrapper;
 import cn.stylefeng.roses.core.datascope.DataScope;
 import cn.stylefeng.roses.core.util.ToolUtil;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -40,7 +41,8 @@ public class ExamScoreController {
     @ResponseBody
     public Object list(@RequestParam(required = false) String name,
                        @RequestParam(required = false) String timeLimit,
-                       @RequestParam(required = false) Long deptId) {
+                       @RequestParam(required = false) Long deptId,
+                       @RequestParam(required = false) Long examType) {
 
         //拼接查询条件
         String beginTime = "";
@@ -52,7 +54,7 @@ public class ExamScoreController {
             endTime = split[1];
         }
             Page<Map<String, Object>> users = examScoreService.selectUserScore(null, name, beginTime, endTime, deptId);
-            Page wrapped = new UserWrapper(users).wrap();
+            Page wrapped = new ExamScoreWrapper(users).wrap();
             return LayuiPageFactory.createPageInfo(wrapped);
 
     }
