@@ -26,16 +26,11 @@ layui.use(['layer', 'form', 'table', 'ztree', 'laydate', 'admin', 'ax'], functio
     MgrUser.initColumn = function () {
         return [[
             {type: 'checkbox'},
-            {field: 'userId', hide: true, sort: true, title: '用户id'},
-            {field: 'account', sort: true, title: '账号'},
             {field: 'name', sort: true, title: '姓名'},
-            {field: 'sexName', sort: true, title: '性别'},
-            {field: 'roleName', sort: true, title: '角色'},
-            {field: 'deptName', sort: true, title: '部门'},
-            {field: 'email', sort: true, title: '邮箱'},
-            {field: 'phone', sort: true, title: '电话'},
-            {field: 'createTime', sort: true, title: '创建时间'},
-            {field: 'status', sort: true, templet: '#statusTpl', title: '状态'},
+            {field: 'score', sort: true, title: '得分'},
+            {field: 'simple_name', sort: true, title: '部门'},
+            {field: 'exam_type', sort: true, title: '考试类型'},
+            {field: 'create_time', sort: true, title: '创建时间'},
             {align: 'center', toolbar: '#tableBar', title: '操作', minWidth: 280}
         ]];
     };
@@ -204,7 +199,7 @@ layui.use(['layer', 'form', 'table', 'ztree', 'laydate', 'admin', 'ax'], functio
     // 渲染表格
     var tableResult = table.render({
         elem: '#' + MgrUser.tableId,
-        url: Feng.ctxPath + '/mgr/list',
+        url: Feng.ctxPath + '/exam_score/list',
         page: true,
         height: "full-98",
         cellMinWidth: 100,

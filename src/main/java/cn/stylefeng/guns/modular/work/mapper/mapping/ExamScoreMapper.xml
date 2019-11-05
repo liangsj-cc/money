@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.stylefeng.guns.modular.work.mapper.ExamScoreMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="cn.stylefeng.guns.modular.work.entity.ExamScore">
+        <result column="full_name" property="deptName" />
+        <result column="score" property="score" />
+        <result column="name" property="userName" />
+        <result column="update_time" property="updateTime" />
+        <result column="exam_type" property="examType" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+
+
+    <select id="selectUserScore" resultType="map">
+               SELECT
+            u.name,d.simple_name,e.score,e.create_time,e.exam_type
+        FROM
+            work_exam_history e
+            LEFT JOIN sys_user u ON u.user_id = e.user_id
+            LEFT JOIN sys_dept d ON u.dept_id = d.dept_id
+             where u.status != 'DELETED'
+        <if test="name != null and name != ''">
+            and (u.phone like CONCAT('%',#{name},'%')
+            or u.account like CONCAT('%',#{name},'%')
+            or u.name like CONCAT('%',#{name},'%'))
+        </if>
+
+        <if test="deptId != null and deptId != 0">
+            and (d.dept_id = #{deptId} or d.dept_id in ( select p.dept_id from sys_dept p where p.pids like CONCAT('%$[', #{deptId}, '$]%') escape '$' ))
+        </if>
+        <if test="beginTime != null and beginTime != '' and endTime != null and endTime != ''">
+            and (e.create_time between CONCAT(#{beginTime},' 00:00:00') and CONCAT(#{endTime},' 23:59:59'))
+        </if>
+            ORDER BY e.create_time desc
+    </select>
+
+
+
+</mapper>
