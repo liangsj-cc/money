@@ -174,9 +174,10 @@ public class ExerciseController extends BaseController {
                 JSONArray options = new JSONArray();
 
                 opHeaders.forEach((i, item) -> {
-                    options.add(item + "." + row.getCell(i).getStringCellValue());
+                    if(!row.getCell(i).getStringCellValue().isEmpty()){
+                        options.add(item + "." + row.getCell(i).getStringCellValue());
+                    }
                 });
-
                 exercise.setOptions(options.toJSONString());
                 JSONArray rights = new JSONArray();
 
