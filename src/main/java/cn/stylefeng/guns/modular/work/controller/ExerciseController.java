@@ -1,5 +1,6 @@
 package cn.stylefeng.guns.modular.work.controller;
 
+import cn.hutool.core.util.StrUtil;
 import cn.stylefeng.guns.core.common.page.LayuiPageFactory;
 import cn.stylefeng.guns.core.shiro.ShiroKit;
 import cn.stylefeng.guns.modular.work.entity.Exercise;
@@ -151,7 +152,9 @@ public class ExerciseController extends BaseController {
                 } else if (s != null && s.contains("选项")) {
                     opHeaders.put(i, s.replace("选项", ""));
                 } else {
-                    labelsKey.put(i, s);
+                    if(StrUtil.isNotBlank(s)){
+                        labelsKey.put(i, s);
+                    }
                 }
             }
             sheet0.removeRow(row0);
@@ -186,7 +189,7 @@ public class ExerciseController extends BaseController {
                         .map(h -> strings.contains(h) ? 1 : 0)
                         .forEach(rights::add);
 
-                if (rights.stream().mapToLong(value -> (long) value).sum() > 0) {
+                if (rights.stream().mapToLong(value -> Long.valueOf(value.toString())).sum() > 0) {
                     exercise.setRights(rights.toJSONString());
                     exercises.add(exercise);
                 }
@@ -194,6 +197,7 @@ public class ExerciseController extends BaseController {
             }
             exerciseService.saveBatch(exercises);
         } catch (Exception e) {
+            e.printStackTrace();
             return "2001";
         }
         return SUCCESS_TIP;
