@@ -15,8 +15,8 @@ public class ExamScoreService {
     @Autowired
     ExamScoreMapper examScoreMapper;
 
-    public Page<Map<String, Object>> selectUserScore(DataScope dataScope, String name, String beginTime, String endTime, Long deptId) {
+    public Page<Map<String, Object>> selectUserScore(DataScope dataScope, String name, String beginTime, String endTime, Long deptId,String examType) {
         Page page = LayuiPageFactory.defaultPage();
-        return examScoreMapper.selectUserScore(page, dataScope, name, beginTime, endTime, deptId);
+        return examScoreMapper.selectUserScore(page, dataScope, name, beginTime, endTime, deptId,examType);
     }
 }

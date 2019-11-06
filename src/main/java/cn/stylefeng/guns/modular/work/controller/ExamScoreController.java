@@ -42,7 +42,7 @@ public class ExamScoreController {
     public Object list(@RequestParam(required = false) String name,
                        @RequestParam(required = false) String timeLimit,
                        @RequestParam(required = false) Long deptId,
-                       @RequestParam(required = false) Long examType) {
+                       @RequestParam(required = false) String examType) {
 
         //拼接查询条件
         String beginTime = "";
@@ -53,7 +53,7 @@ public class ExamScoreController {
             beginTime = split[0];
             endTime = split[1];
         }
-            Page<Map<String, Object>> users = examScoreService.selectUserScore(null, name, beginTime, endTime, deptId);
+            Page<Map<String, Object>> users = examScoreService.selectUserScore(null, name, beginTime, endTime, deptId,examType);
             Page wrapped = new ExamScoreWrapper(users).wrap();
             return LayuiPageFactory.createPageInfo(wrapped);
 

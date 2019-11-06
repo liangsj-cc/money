@@ -27,7 +27,9 @@
             or u.account like CONCAT('%',#{name},'%')
             or u.name like CONCAT('%',#{name},'%'))
         </if>
-
+        <if test="examType != null and examType != ''">
+            and e.exam_type = #{examType}
+        </if>
         <if test="deptId != null and deptId != 0">
             and (d.dept_id = #{deptId} or d.dept_id in ( select p.dept_id from sys_dept p where p.pids like CONCAT('%$[', #{deptId}, '$]%') escape '$' ))
         </if>
