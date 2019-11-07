@@ -211,6 +211,9 @@ public class ExamController extends BaseController {
         Exam exam = examService.getOne(
                 new LambdaQueryWrapper<Exam>().eq(Exam::getDeptId, deptId).eq(Exam::getType,
                         "0"));
+        if(exam ==null){
+            return PREFIX + "noexam.html";
+        }
         Map map = JSONObject.parseObject(exam.getSelector(), Map.class);
         List<Exercise> exercises = exerciseService.selectByUserAndType(map, exam.getNum());
 
@@ -341,7 +344,12 @@ public class ExamController extends BaseController {
         Exam exam = examService.getOne(
                 new LambdaQueryWrapper<Exam>().eq(Exam::getDeptId, deptId).eq(Exam::getType,
                         "1"));
+        if(exam ==null){
+            return PREFIX + "noexam.html";
+        }
         Map map = JSONObject.parseObject(exam.getSelector(), Map.class);
+
+
         List<Exercise> exercises = exerciseService.selectByUserAndType(map, exam.getNum());
 
         List<List<String>> exops = exercises.stream().map(e -> JSONArray.parseArray(e.getOptions(), String.class)).collect(Collectors.toList());

@@ -31,7 +31,7 @@ layui.use(['layer', 'form', 'table', 'ztree', 'laydate', 'admin', 'ax'], functio
             {field: 'simple_name', sort: true, title: '部门'},
             {field: 'exam_type', sort: true, title: '考试类型'},
             {field: 'create_time', sort: true, title: '创建时间'},
-            {align: 'center', toolbar: '#tableBar', title: '操作', minWidth: 280}
+            // {align: 'center', toolbar: '#tableBar', title: '操作', minWidth: 280}
         ]];
     };
 
@@ -158,15 +158,7 @@ layui.use(['layer', 'form', 'table', 'ztree', 'laydate', 'admin', 'ax'], functio
      * @param data 点击按钮时候的行数据
      */
     MgrUser.resetPassword = function (data) {
-        Feng.confirm("是否重置密码为111111 ?", function () {
-            var ajax = new $ax(Feng.ctxPath + "/mgr/reset", function (data) {
-                Feng.success("重置密码成功!");
-            }, function (data) {
-                Feng.error("重置密码失败!");
-            });
-            ajax.set("userId", data.userId);
-            ajax.start();
-        });
+
     };
 
     /**
@@ -212,6 +204,7 @@ layui.use(['layer', 'form', 'table', 'ztree', 'laydate', 'admin', 'ax'], functio
         elem: '#timeLimit',
         range: true,
         max: Feng.currentDate()
+
     });
 
     //初始化左侧部门树

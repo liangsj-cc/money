@@ -152,7 +152,7 @@ public class ExerciseController extends BaseController {
                 } else if (s != null && s.contains("选项")) {
                     opHeaders.put(i, s.replace("选项", ""));
                 } else {
-                    if(StrUtil.isNotBlank(s)){
+                    if (StrUtil.isNotBlank(s)) {
                         labelsKey.put(i, s);
                     }
                 }
@@ -174,7 +174,7 @@ public class ExerciseController extends BaseController {
                 JSONArray options = new JSONArray();
 
                 opHeaders.forEach((i, item) -> {
-                    if(!row.getCell(i).getStringCellValue().isEmpty()){
+                    if (row.getCell(i) != null && StrUtil.isNotBlank(row.getCell(i).getStringCellValue())) {
                         options.add(item + "." + row.getCell(i).getStringCellValue());
                     }
                 });
