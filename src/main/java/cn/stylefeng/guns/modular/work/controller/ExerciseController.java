@@ -174,6 +174,7 @@ public class ExerciseController extends BaseController {
                 JSONArray options = new JSONArray();
 
                 opHeaders.forEach((i, item) -> {
+                    row.getCell(i).setCellType(Cell.CELL_TYPE_STRING);
                     if (row.getCell(i) != null && StrUtil.isNotBlank(row.getCell(i).getStringCellValue())) {
                         options.add(item + "." + row.getCell(i).getStringCellValue());
                     }
