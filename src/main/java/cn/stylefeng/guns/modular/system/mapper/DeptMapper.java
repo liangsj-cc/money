@@ -44,5 +44,5 @@ public interface DeptMapper extends BaseMapper<Dept> {
      * 根据部门名称查询部门id
      * @param fullName
      */
-    Dept getDeptByfullName(@Param("fullName") String fullName);
+    Dept getDeptByfullName(@Param("fullName") String fullName,@Param("teamName") String teamName);
 }

@@ -285,11 +285,12 @@ public class UserService extends ServiceImpl<UserMapper, User> {
                     String roleid = roleService.getRoleIdByRoleName("考试人员");
                     user.setRoleId(roleid);//角色id
                     String deptName = row.getCell(5).getStringCellValue();//部门名称
-                    Dept dept = deptService.getDeptByfullName(deptName.trim());
+                    String teamName = row.getCell(6).getStringCellValue();//队组名称
+                    Dept dept = deptService.getDeptByfullName(deptName.trim(),teamName.trim());
                     if ("".equals(dept.getDeptId())) {
                         throw new ServiceException(BizExceptionEnum.DEPT_ID_IS_NULL);
                     }
-                    user.setPassword("123456");
+                    user.setPassword("111111");
                     user.setDeptId(dept.getDeptId());
                     user.setStatus("ENABLE");
                     user.setBirthday(new Date());

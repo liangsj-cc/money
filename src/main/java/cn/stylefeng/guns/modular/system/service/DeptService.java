@@ -145,8 +145,8 @@ public class DeptService extends ServiceImpl<DeptMapper, Dept> {
      * @param fullName
      * @return
      */
-    public Dept getDeptByfullName(String fullName){
-        Dept dept = this.baseMapper.getDeptByfullName(fullName);
+    public Dept getDeptByfullName(String fullName,String teamName){
+        Dept dept = this.baseMapper.getDeptByfullName(fullName,teamName);
         return dept;
     }
 
