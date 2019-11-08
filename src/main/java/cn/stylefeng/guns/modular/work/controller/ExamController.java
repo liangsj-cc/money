@@ -197,8 +197,8 @@ public class ExamController extends BaseController {
                 model.addAttribute("answerRight", answerRight);
                 model.addAttribute("rightIds",
                         JSONArray
-                        .parseArray(
-                                examHistoryList.get(0).getRightIds(),String.class));
+                                .parseArray(
+                                        examHistoryList.get(0).getRightIds(), String.class));
             } else {
                 model.addAttribute("score", null);
                 model.addAttribute("answerRight", null);
@@ -211,7 +211,7 @@ public class ExamController extends BaseController {
         Exam exam = examService.getOne(
                 new LambdaQueryWrapper<Exam>().eq(Exam::getDeptId, deptId).eq(Exam::getType,
                         "0"));
-        if(exam ==null){
+        if (exam == null) {
             return PREFIX + "noexam.html";
         }
         Map map = JSONObject.parseObject(exam.getSelector(), Map.class);
@@ -331,7 +331,7 @@ public class ExamController extends BaseController {
                 model.addAttribute("rightIds",
                         JSONArray
                                 .parseArray(
-                                        examHistoryList.get(0).getRightIds(),String.class));
+                                        examHistoryList.get(0).getRightIds(), String.class));
             } else {
                 model.addAttribute("score", null);
                 model.addAttribute("answerRight", null);
@@ -344,7 +344,7 @@ public class ExamController extends BaseController {
         Exam exam = examService.getOne(
                 new LambdaQueryWrapper<Exam>().eq(Exam::getDeptId, deptId).eq(Exam::getType,
                         "1"));
-        if(exam ==null){
+        if (exam == null) {
             return PREFIX + "noexam.html";
         }
         Map map = JSONObject.parseObject(exam.getSelector(), Map.class);
@@ -380,9 +380,6 @@ public class ExamController extends BaseController {
         model.addAttribute("examHistoryId", examHistory.getId());
         return PREFIX + "month.html";
     }
-
-
-
 
 
 }
