@@ -19,10 +19,8 @@ import org.apache.poi.ss.usermodel.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import sun.applet.resources.MsgAppletViewer;
 
@@ -210,5 +208,10 @@ public class ExerciseController extends BaseController {
     public Object delete(@RequestParam Long execriseId) {
         this.exerciseService.removeById(execriseId);
         return SUCCESS_TIP;
+    }
+
+    @RequestMapping(value = "/info/{id}")
+    public Object infoId(@PathVariable String id, Model model) {
+        return PREFIX + "info.html";
     }
 }

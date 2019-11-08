@@ -11,7 +11,7 @@
         1=1
         <foreach collection="condition.entrySet()" item="item" index="key">
             <if test="key!=null and key!= ''">
-                and JSON_EXTRACT(w.label, CONCAT('$.','"${key}"')) = #{item}
+                OR JSON_EXTRACT(w.label, CONCAT('$.','"${key}"')) = #{item}
             </if>
         </foreach>
     </select>
@@ -26,7 +26,7 @@
         1 = 1
         <foreach collection="selector.entrySet()" item="item" index="key">
             <if test="key!=null and key!= ''">
-                and JSON_EXTRACT(w.label, CONCAT('$.','"${key}"')) = #{item}
+                OR JSON_EXTRACT(w.label, CONCAT('$.','"${key}"')) = #{item}
             </if>
         </foreach>
         ORDER BY
