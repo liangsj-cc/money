@@ -18,7 +18,7 @@ layui.use(['layer', 'form', 'table', 'admin', 'ax'], function () {
     Exercise.initColumn = function () {
         return [[
             {type: 'checkbox'},
-            {field: 'id', hide: false, sort: true, title: 'id'},
+            //  {field: 'id', hide: false, sort: true, title: 'id'},
             {field: 'name', sort: true, title: '题目'},
             {field: 'options', templet: '#options', title: '选项'},
             {field: 'rights', hide: true, title: '正确答案'},
@@ -57,7 +57,7 @@ layui.use(['layer', 'form', 'table', 'admin', 'ax'], function () {
                 type: 2,
                 title: '习题详情',
                 area: ['600px', '480px'],
-                content:`${Feng.ctxPath}/exercise/info/${data.id}`,
+                content: `${Feng.ctxPath}/exercise/info/${data.id}`,
             });
         }
     });

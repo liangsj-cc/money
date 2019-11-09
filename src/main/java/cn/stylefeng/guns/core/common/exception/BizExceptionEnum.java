@@ -60,9 +60,9 @@ public enum BizExceptionEnum implements AbstractBaseExceptionEnum {
     ACCOUNT_FREEZED(401, "账号被冻结"),
     OLD_PWD_NOT_RIGHT(402, "原密码不正确"),
     TWO_PWD_NOT_MATCH(405, "两次输入密码不一致"),
-    DEPT_ID_IS_NULL(406,"部门信息错误，请检查后重新导入"),
-    IDENTITYCARD_ERROR(407,"身份证号码位数不正确，请检查"),
-    USER_INPORT_ERROR(408,"员工部门或身份证位数输入错误"),
+    DEPT_ID_IS_NULL(406, "部门信息错误，请检查后重新导入"),
+    IDENTITYCARD_ERROR(407, "身份证号码位数不正确，请检查"),
+    USER_INPORT_ERROR(408, "员工部门或身份证位数输入错误"),
 
     /**
      * 错误的请求
@@ -89,8 +89,9 @@ public enum BizExceptionEnum implements AbstractBaseExceptionEnum {
      * 其他
      */
     AUTH_REQUEST_ERROR(400, "账号密码错误"),
-    FILE_NULL(400,"文件不能为空"),
-    EXAM_COMP(400,"考试已完成");
+    FILE_NULL(400, "文件不能为空"),
+    EXAM_NULL(400,"考试不存在"),
+    EXAM_COMP(400, "考试已完成");
 
     BizExceptionEnum(int code, String message) {
         this.code = code;

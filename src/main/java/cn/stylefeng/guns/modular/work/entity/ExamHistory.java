@@ -15,8 +15,8 @@ public class ExamHistory {
     @TableId(value = "id", type = IdType.ID_WORKER)
     private Long id;
 
-    @TableField("dept_id")
-    private Long deptId;
+    @TableField("exam_id")
+    private Long examId;
 
     @TableField("user_id")
     private Long userId;

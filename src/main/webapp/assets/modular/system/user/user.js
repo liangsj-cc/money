@@ -28,6 +28,7 @@ layui.use(['layer', 'form', 'table', 'ztree', 'laydate', 'admin', 'ax'], functio
             {field: 'userId', hide: true, sort: true, title: '用户id'},
             {field: 'account', sort: true, title: '账号'},
             {field: 'name', sort: true, title: '姓名'},
+            {align: 'examTable', toolbar: '#exam', title: '考试', minWidth: 280},
             {field: 'sexName', sort: true, title: '性别'},
             {field: 'roleName', sort: true, title: '角色'},
             {field: 'deptName', sort: true, title: '部门'},
@@ -240,6 +241,35 @@ layui.use(['layer', 'form', 'table', 'ztree', 'laydate', 'admin', 'ax'], functio
     $('#btnExpin').click(function () {
         MgrUser.InexportExcel();
     });
+
+    $("#btnExam").click(() => {
+        var checkRows = table.checkStatus(MgrUser.tableId);
+        if (checkRows.data.length === 0) {
+            Feng.error("请选择你要分配的用户");
+        } else {
+            top.layui.admin.open({
+                type: 2,
+                title: '添加考试',
+                content: Feng.ctxPath + '/exam/show',
+                area: ['800px', '500px'],
+                end: function () {
+                    let examIds = admin.getTempData('examIds')
+                    let userIds = JSON.stringify(checkRows.data.map(i => i.userId))
+                    var ajax = new $ax(Feng.ctxPath + "/exam_user/add", function (data) {
+                        Feng.success("添加成功！");
+                    }, function (data) {
+                        Feng.error("添加失败！" + data.responseJSON.message)
+                    });
+
+                    console.log(userIds)
+                    ajax.set({examIds, userIds})
+                    ajax.start();
+
+
+                }
+            });
+        }
+    })
 
     // 工具条点击事件
     table.on('tool(' + MgrUser.tableId + ')', function (obj) {

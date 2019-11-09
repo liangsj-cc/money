@@ -7,6 +7,7 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.apache.ibatis.annotations.Param;
 
+import java.util.List;
 import java.util.Map;
 
 
@@ -22,4 +23,8 @@ public interface ExamMapper extends BaseMapper<Exam> {
      * 通过账号获取用户
      */
     People getByAccount(@Param("peopleIdentify") String peopleIdentify);
+
+    List<String> examByUserId(@Param("userId") Long userId);
+
+    List<Exam> finExamByUserIdAndType(@Param("userId") Long userId, @Param("type") String type);
 }

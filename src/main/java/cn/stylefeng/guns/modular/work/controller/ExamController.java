@@ -63,6 +63,11 @@ public class ExamController extends BaseController {
         return PREFIX + "exam.html";
     }
 
+    @RequestMapping("/show")
+    public String examShow() {
+        return PREFIX + "exam_show.html";
+    }
+
     /**
      * 跳转到习题导入页
      *
@@ -88,12 +93,7 @@ public class ExamController extends BaseController {
             lw.eq(Exam::getType, type);
         }
         IPage<Exam> examPage = examService.page(LayuiPageFactory.defaultPage(), lw);
-        examPage.getRecords().forEach(
-                item ->
-                        item.set("deptName",
-                                ConstantFactory.me().getDeptName(item.getDeptId())
-                        )
-        );
+
         return LayuiPageFactory.createPageInfo(examPage);
     }
 
@@ -106,10 +106,6 @@ public class ExamController extends BaseController {
     @RequestMapping("/add/json")
     @ResponseBody
     public ResponseData addExam(Exam exam) {
-        if (examService.deptHasExam(exam.getDeptId(), exam.getType())) {
-            throw new ServiceException(BizExceptionEnum.CANT_ADD_EXAM_DEPT_HAS_EXAM);
-        }
-
         examService.save(exam);
         return SUCCESS_TIP;
     }
@@ -118,16 +114,7 @@ public class ExamController extends BaseController {
     @RequestMapping("/edit/json")
     @ResponseBody
     public ResponseData editExam(Exam exam) {
-        Exam dbExam = examService.getById(exam.getId());
-
-        if (!(dbExam.getType().equals(exam.getType()) && dbExam.getDeptId().equals(exam.getDeptId()))) {
-            // 类型不变不需要判断可以
-            if (examService.deptHasExam(exam.getDeptId(), exam.getType())) {
-                throw new ServiceException(BizExceptionEnum.CANT_ADD_EXAM_DEPT_HAS_EXAM);
-            }
-        }
         examService.updateById(exam);
-
         return SUCCESS_TIP;
     }
 
@@ -154,94 +141,123 @@ public class ExamController extends BaseController {
         }
 
         Exam exam = examService.getById(id);
-        exam.set("deptName", ConstantFactory.me().getDeptName(exam.getDeptId()));
         return ResponseData.success(exam);
+    }
+
+    private void setModelInfoDayOrMonth(Model model, String type) {
+
+        Date start = "1".equals(type)?DateUtil.beginOfMonth(new Date()):DateUtil.beginOfDay(new Date());
+        Date end = "1".equals(type)?DateUtil.endOfMonth(new Date()):DateUtil.endOfDay(new Date());
+        ShiroUser shiroUser = ShiroKit.getUserNotNull();
+        Long userId = shiroUser.getId();
+        List<Exam> exams = examService.finExamByUserIdAndType(userId, type);
+        List<Map> nexams = exams.stream().map(exam -> {
+            ExamHistory examHistory = examHistoryService.getOne(
+                    new LambdaQueryWrapper<ExamHistory>()
+                            .eq(ExamHistory::getExamId, exam.getId())
+                            .eq(ExamHistory::getUserId, userId)
+                    .gt(ExamHistory::getCreateTime,start)
+                    .le(ExamHistory::getCreateTime,end)
+            );
+            Map<String, Object> map = new HashMap<>();
+            map.put("exam", exam);
+            boolean isComp = examHistory != null && examHistory.getAnswer() != null;
+            map.put("isComp", isComp);
+            if (isComp) {
+                map.put("score", examHistory.getScore());
+                map.put("rightSize", JSONArray.parseArray(examHistory.getRightIds()).size());
+            }
+            return map;
+        }).collect(Collectors.toList());
+
+        model.addAttribute("obj", JSONObject.toJSON(nexams));
     }
 
 
     @GetMapping("/day")
     public String examDay(Model model) {
-        ShiroUser shiroUser = ShiroKit.getUserNotNull();
-        Long deptId = shiroUser.getDeptId();
-        Long userId = shiroUser.getId();
-
-        List<ExamHistory> examHistoryList = examHistoryService.list(new LambdaQueryWrapper<ExamHistory>()
-                .eq(ExamHistory::getDeptId, deptId)
-                .eq(ExamHistory::getUserId, userId)
-                .eq(ExamHistory::getType, "0")
-                .gt(ExamHistory::getCreateTime, DateUtil.beginOfDay(new Date()))
-                .le(ExamHistory::getCreateTime, DateUtil.endOfDay(new Date()))
-        );
-        if (examHistoryList.size() == 1) {
-            String examJson = examHistoryList.get(0).getExamJson();
-            Map map = JSONObject.parseObject(examJson, Map.class);
-            model.addAllAttributes(map);
-            model.addAttribute("examHistoryId", examHistoryList.get(0).getId());
-            String answer = examHistoryList.get(0).getAnswer();
-            model.addAttribute("answer", answer == null ? null : answer.replace("\"", "\'")
-            );
-            if (answer != null) {
-                model.addAttribute("score", examHistoryList.get(0).getScore());
-                List<Exercise> exercises = JSONArray.parseArray(map.get("es").toString(), Exercise.class);
-                List<String> answerRight = exercises.stream().map(item -> {
-                    List<String> opts = JSONArray.parseArray(item.getOptions(), String.class);
-                    List<Integer> rights = JSONArray.parseArray(item.getRights(), Integer.class);
-                    List<String> rightOptsH = new ArrayList<>();
-                    for (int i = 0; i < rights.size(); i++) {
-                        if (rights.get(i) == 1) {
-                            rightOptsH.add((opts.get(i).split("\\."))[0]);
-                        }
-                    }
-                    return rightOptsH.stream().reduce((a, b) -> a + "," + b).orElse("");
-                }).collect(Collectors.toList());
-                model.addAttribute("answerRight", answerRight);
-                model.addAttribute("rightIds",
-                        JSONArray
-                                .parseArray(
-                                        examHistoryList.get(0).getRightIds(), String.class));
-            } else {
-                model.addAttribute("score", null);
-                model.addAttribute("answerRight", null);
-                model.addAttribute("rightIds", null);
-            }
-
-            return PREFIX + "day.html";
-        }
-
-        Exam exam = examService.getOne(
-                new LambdaQueryWrapper<Exam>().eq(Exam::getDeptId, deptId).eq(Exam::getType,
-                        "0"));
-        if (exam == null) {
-            return PREFIX + "noexam.html";
-        }
-        Map map = JSONObject.parseObject(exam.getSelector(), Map.class);
-        List<Exercise> exercises = exerciseService.selectByUserAndType(map, exam.getNum());
-
-        List<List<String>> exops = exercises.stream().map(e -> JSONArray.parseArray(e.getOptions(), String.class)).collect(Collectors.toList());
-        List<Boolean> more =
-                exercises
-                        .stream()
-                        .map(e -> JSONArray.parseArray(e.getRights(), Long.class))
-                        .map(rs -> rs.stream().mapToLong(value -> value).sum() > 1)
-                        .collect(Collectors.toList());
-
-        model.addAttribute("es", exercises);
-        model.addAttribute("exops", exops);
-        model.addAttribute("rig", more);
-        model.addAttribute("exam", exam);
-        model.addAttribute("answer", null);
-        model.addAttribute("answerRight", null);
-        model.addAttribute("score", null);
-        model.addAttribute("rightIds", null);
-        ExamHistory examHistory = new ExamHistory();
-        examHistory.setDeptId(deptId);
-        examHistory.setUserId(userId);
-        // 0 日考
-        examHistory.setType("0");
-        examHistory.setExamJson(JSONObject.toJSONString(model.asMap()));
-        examHistoryService.save(examHistory);
-        model.addAttribute("examHistoryId", examHistory.getId());
-        return PREFIX + "day.html";
+        setModelInfoDayOrMonth(model, "0");
+        return PREFIX + "exam_list.html";
+//        ShiroUser shiroUser = ShiroKit.getUserNotNull();
+//        Long deptId = shiroUser.getDeptId();
+//        Long userId = shiroUser.getId();
+//        List<ExamHistory> examHistoryList = examHistoryService.list(new LambdaQueryWrapper<ExamHistory>()
+//                .eq(ExamHistory::getDeptId, deptId)
+//                .eq(ExamHistory::getUserId, userId)
+//                .eq(ExamHistory::getType, "0")
+//                .gt(ExamHistory::getCreateTime, DateUtil.beginOfDay(new Date()))
+//                .le(ExamHistory::getCreateTime, DateUtil.endOfDay(new Date()))
+//        );
+//        if (examHistoryList.size() == 1) {
+//            String examJson = examHistoryList.get(0).getExamJson();
+//            Map map = JSONObject.parseObject(examJson, Map.class);
+//            model.addAllAttributes(map);
+//            model.addAttribute("examHistoryId", examHistoryList.get(0).getId());
+//            String answer = examHistoryList.get(0).getAnswer();
+//            model.addAttribute("answer", answer == null ? null : answer.replace("\"", "\'")
+//            );
+//            if (answer != null) {
+//                model.addAttribute("score", examHistoryList.get(0).getScore());
+//                List<Exercise> exercises = JSONArray.parseArray(map.get("es").toString(), Exercise.class);
+//                List<String> answerRight = exercises.stream().map(item -> {
+//                    List<String> opts = JSONArray.parseArray(item.getOptions(), String.class);
+//                    List<Integer> rights = JSONArray.parseArray(item.getRights(), Integer.class);
+//                    List<String> rightOptsH = new ArrayList<>();
+//                    for (int i = 0; i < rights.size(); i++) {
+//                        if (rights.get(i) == 1) {
+//                            rightOptsH.add((opts.get(i).split("\\."))[0]);
+//                        }
+//                    }
+//                    return rightOptsH.stream().reduce((a, b) -> a + "," + b).orElse("");
+//                }).collect(Collectors.toList());
+//                model.addAttribute("answerRight", answerRight);
+//                model.addAttribute("rightIds",
+//                        JSONArray
+//                                .parseArray(
+//                                        examHistoryList.get(0).getRightIds(), String.class));
+//            } else {
+//                model.addAttribute("score", null);
+//                model.addAttribute("answerRight", null);
+//                model.addAttribute("rightIds", null);
+//            }
+//
+//            return PREFIX + "day.html";
+//        }
+//
+//        Exam exam = examService.getOne(
+//                new LambdaQueryWrapper<Exam>().eq(Exam::getDeptId, deptId).eq(Exam::getType,
+//                        "0"));
+//        if (exam == null) {
+//            return PREFIX + "noexam.html";
+//        }
+//        Map map = JSONObject.parseObject(exam.getSelector(), Map.class);
+//        List<Exercise> exercises = exerciseService.selectByUserAndType(map, exam.getNum());
+//
+//        List<List<String>> exops = exercises.stream().map(e -> JSONArray.parseArray(e.getOptions(), String.class)).collect(Collectors.toList());
+//        List<Boolean> more =
+//                exercises
+//                        .stream()
+//                        .map(e -> JSONArray.parseArray(e.getRights(), Long.class))
+//                        .map(rs -> rs.stream().mapToLong(value -> value).sum() > 1)
+//                        .collect(Collectors.toList());
+//
+//        model.addAttribute("es", exercises);
+//        model.addAttribute("exops", exops);
+//        model.addAttribute("rig", more);
+//        model.addAttribute("exam", exam);
+//        model.addAttribute("answer", null);
+//        model.addAttribute("answerRight", null);
+//        model.addAttribute("score", null);
+//        model.addAttribute("rightIds", null);
+//        ExamHistory examHistory = new ExamHistory();
+//        examHistory.setDeptId(deptId);
+//        examHistory.setUserId(userId);
+//        // 0 日考
+//        examHistory.setType("0");
+//        examHistory.setExamJson(JSONObject.toJSONString(model.asMap()));
+//        examHistoryService.save(examHistory);
+//        model.addAttribute("examHistoryId", examHistory.getId());
+//        return PREFIX + "day.html";
     }
 
 
@@ -291,21 +307,25 @@ public class ExamController extends BaseController {
     }
 
 
-    @GetMapping("/month")
-    public Object examMonth(Model model) {
-        ShiroUser shiroUser = ShiroKit.getUserNotNull();
-        Long deptId = shiroUser.getDeptId();
-        Long userId = shiroUser.getId();
+    @GetMapping("/alone/{eid}")
+    public Object alone(Model model, @PathVariable("eid") Long eid) {
+        Exam exam = examService.getById(eid);
+        if (exam == null) {
+            throw new ServiceException(BizExceptionEnum.EXAM_NULL);
+        }
 
+        Date start = "1".equals(exam.getType())?DateUtil.beginOfMonth(new Date()):DateUtil.beginOfDay(new Date());
+        Date end = "1".equals(exam.getType())?DateUtil.endOfMonth(new Date()):DateUtil.endOfDay(new Date());
+        ShiroUser shiroUser = ShiroKit.getUserNotNull();
+        Long userId = shiroUser.getId();
         List<ExamHistory> examHistoryList = examHistoryService.list(new LambdaQueryWrapper<ExamHistory>()
-                .eq(ExamHistory::getDeptId, deptId)
+                .eq(ExamHistory::getExamId, eid)
                 .eq(ExamHistory::getUserId, userId)
-                .eq(ExamHistory::getType, "1")
-                .gt(ExamHistory::getCreateTime, DateUtil.beginOfMonth(new Date()))
-                .le(ExamHistory::getCreateTime, DateUtil.endOfMonth(new Date()))
+                .eq(ExamHistory::getType, exam.getType())
+                .gt(ExamHistory::getCreateTime, start)
+                .le(ExamHistory::getCreateTime,end)
         );
         if (examHistoryList.size() == 1) {
-
             String examJson = examHistoryList.get(0).getExamJson();
             Map map = JSONObject.parseObject(examJson, Map.class);
             model.addAllAttributes(map);
@@ -338,18 +358,10 @@ public class ExamController extends BaseController {
                 model.addAttribute("rightIds", null);
             }
 
-            return PREFIX + "month.html";
+            return PREFIX + "exam_alone.html";
         }
 
-        Exam exam = examService.getOne(
-                new LambdaQueryWrapper<Exam>().eq(Exam::getDeptId, deptId).eq(Exam::getType,
-                        "1"));
-        if (exam == null) {
-            return PREFIX + "noexam.html";
-        }
         Map map = JSONObject.parseObject(exam.getSelector(), Map.class);
-
-
         List<Exercise> exercises = exerciseService.selectByUserAndType(map, exam.getNum());
 
         List<List<String>> exops = exercises.stream().map(e -> JSONArray.parseArray(e.getOptions(), String.class)).collect(Collectors.toList());
@@ -368,17 +380,108 @@ public class ExamController extends BaseController {
         model.addAttribute("answerRight", null);
         model.addAttribute("score", null);
         model.addAttribute("rightIds", null);
-
-
         ExamHistory examHistory = new ExamHistory();
-        examHistory.setDeptId(deptId);
+        examHistory.setExamId(eid);
         examHistory.setUserId(userId);
-        // 0 月考
-        examHistory.setType("1");
+        // 0 日考
+        examHistory.setType(exam.getType());
         examHistory.setExamJson(JSONObject.toJSONString(model.asMap()));
         examHistoryService.save(examHistory);
         model.addAttribute("examHistoryId", examHistory.getId());
-        return PREFIX + "month.html";
+        return PREFIX + "exam_alone.html";
+    }
+
+
+    @GetMapping("/month")
+    public Object examMonth(Model model) {
+        setModelInfoDayOrMonth(model, "1");
+        return PREFIX + "exam_list.html";
+//        ShiroUser shiroUser = ShiroKit.getUserNotNull();
+//        Long deptId = shiroUser.getDeptId();
+//        Long userId = shiroUser.getId();
+//
+//        List<ExamHistory> examHistoryList = examHistoryService.list(new LambdaQueryWrapper<ExamHistory>()
+//                .eq(ExamHistory::getDeptId, deptId)
+//                .eq(ExamHistory::getUserId, userId)
+//                .eq(ExamHistory::getType, "1")
+//                .gt(ExamHistory::getCreateTime, DateUtil.beginOfMonth(new Date()))
+//                .le(ExamHistory::getCreateTime, DateUtil.endOfMonth(new Date()))
+//        );
+//        if (examHistoryList.size() == 1) {
+//
+//            String examJson = examHistoryList.get(0).getExamJson();
+//            Map map = JSONObject.parseObject(examJson, Map.class);
+//            model.addAllAttributes(map);
+//            model.addAttribute("examHistoryId", examHistoryList.get(0).getId());
+//            String answer = examHistoryList.get(0).getAnswer();
+//            model.addAttribute("answer", answer == null ? null : answer.replace("\"", "\'")
+//            );
+//            if (answer != null) {
+//                model.addAttribute("score", examHistoryList.get(0).getScore());
+//                List<Exercise> exercises = JSONArray.parseArray(map.get("es").toString(), Exercise.class);
+//                List<String> answerRight = exercises.stream().map(item -> {
+//                    List<String> opts = JSONArray.parseArray(item.getOptions(), String.class);
+//                    List<Integer> rights = JSONArray.parseArray(item.getRights(), Integer.class);
+//                    List<String> rightOptsH = new ArrayList<>();
+//                    for (int i = 0; i < rights.size(); i++) {
+//                        if (rights.get(i) == 1) {
+//                            rightOptsH.add((opts.get(i).split("\\."))[0]);
+//                        }
+//                    }
+//                    return rightOptsH.stream().reduce((a, b) -> a + "," + b).orElse("");
+//                }).collect(Collectors.toList());
+//                model.addAttribute("answerRight", answerRight);
+//                model.addAttribute("rightIds",
+//                        JSONArray
+//                                .parseArray(
+//                                        examHistoryList.get(0).getRightIds(), String.class));
+//            } else {
+//                model.addAttribute("score", null);
+//                model.addAttribute("answerRight", null);
+//                model.addAttribute("rightIds", null);
+//            }
+//
+//            return PREFIX + "month.html";
+//        }
+//
+//        Exam exam = examService.getOne(
+//                new LambdaQueryWrapper<Exam>().eq(Exam::getDeptId, deptId).eq(Exam::getType,
+//                        "1"));
+//        if (exam == null) {
+//            return PREFIX + "noexam.html";
+//        }
+//        Map map = JSONObject.parseObject(exam.getSelector(), Map.class);
+//
+//
+//        List<Exercise> exercises = exerciseService.selectByUserAndType(map, exam.getNum());
+//
+//        List<List<String>> exops = exercises.stream().map(e -> JSONArray.parseArray(e.getOptions(), String.class)).collect(Collectors.toList());
+//        List<Boolean> more =
+//                exercises
+//                        .stream()
+//                        .map(e -> JSONArray.parseArray(e.getRights(), Long.class))
+//                        .map(rs -> rs.stream().mapToLong(value -> value).sum() > 1)
+//                        .collect(Collectors.toList());
+//
+//        model.addAttribute("es", exercises);
+//        model.addAttribute("exops", exops);
+//        model.addAttribute("rig", more);
+//        model.addAttribute("exam", exam);
+//        model.addAttribute("answer", null);
+//        model.addAttribute("answerRight", null);
+//        model.addAttribute("score", null);
+//        model.addAttribute("rightIds", null);
+//
+//
+//        ExamHistory examHistory = new ExamHistory();
+//        examHistory.setDeptId(deptId);
+//        examHistory.setUserId(userId);
+//        // 0 月考
+//        examHistory.setType("1");
+//        examHistory.setExamJson(JSONObject.toJSONString(model.asMap()));
+//        examHistoryService.save(examHistory);
+//        model.addAttribute("examHistoryId", examHistory.getId());
+//        return PREFIX + "month.html";
     }
 
 

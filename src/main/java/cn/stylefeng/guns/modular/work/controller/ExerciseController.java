@@ -1,12 +1,14 @@
 package cn.stylefeng.guns.modular.work.controller;
 
 import cn.hutool.core.util.StrUtil;
+import cn.stylefeng.guns.core.common.exception.BizExceptionEnum;
 import cn.stylefeng.guns.core.common.page.LayuiPageFactory;
 import cn.stylefeng.guns.core.shiro.ShiroKit;
 import cn.stylefeng.guns.modular.work.entity.Exercise;
 import cn.stylefeng.guns.modular.work.service.ExerciseService;
 import cn.stylefeng.roses.core.base.controller.BaseController;
 import cn.stylefeng.roses.core.datascope.DataScope;
+import cn.stylefeng.roses.kernel.model.exception.ServiceException;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
@@ -212,6 +214,26 @@ public class ExerciseController extends BaseController {
 
     @RequestMapping(value = "/info/{id}")
     public Object infoId(@PathVariable String id, Model model) {
+        Exercise exercise = exerciseService.getById(id);
+        if (exercise != null) {
+            model.addAttribute("exercise", exercise);
+            List<String> opts = JSONArray.parseArray(exercise.getOptions(), String.class);
+            List<Long> rgs = JSONArray.parseArray(exercise.getRights(), Long.class);
+            List<String> rightH = new ArrayList<>();
+            for (int i = 0; i < opts.size(); i++) {
+                if (rgs.get(i) == 1) {
+                    rightH.add((opts.get(i).split("\\."))[0]);
+                }
+            }
+            model.addAttribute("exerciseName", exercise.getName());
+            model.addAttribute("opts", opts);
+            model.addAttribute("isMore", rightH.size() != 1);
+            model.addAttribute("right",
+                    rightH.stream()
+                            .reduce((a, b) -> a + "," + b).orElse("N/A")
+            );
+        }
+
         return PREFIX + "info.html";
     }
 }

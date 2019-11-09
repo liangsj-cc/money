@@ -24,6 +24,8 @@ import cn.stylefeng.guns.core.common.constant.state.MenuStatus;
 import cn.stylefeng.guns.core.log.LogObjectHolder;
 import cn.stylefeng.guns.modular.system.entity.*;
 import cn.stylefeng.guns.modular.system.mapper.*;
+import cn.stylefeng.guns.modular.work.mapper.ExamMapper;
+import cn.stylefeng.guns.modular.work.mapper.ExamUserMapper;
 import cn.stylefeng.roses.core.util.SpringContextHolder;
 import cn.stylefeng.roses.core.util.ToolUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
@@ -51,6 +53,9 @@ public class ConstantFactory implements IConstantFactory {
     private UserMapper userMapper = SpringContextHolder.getBean(UserMapper.class);
     private MenuMapper menuMapper = SpringContextHolder.getBean(MenuMapper.class);
     private NoticeMapper noticeMapper = SpringContextHolder.getBean(NoticeMapper.class);
+    private ExamUserMapper examUserMapper = SpringContextHolder.getBean(ExamUserMapper.class);
+    private ExamMapper examMapper = SpringContextHolder.getBean(ExamMapper.class);
+
 
     public static IConstantFactory me() {
         return SpringContextHolder.getBean("constantFactory");
@@ -327,6 +332,11 @@ public class ConstantFactory implements IConstantFactory {
             parentDeptIds.add(Long.valueOf(StrUtil.removeSuffix(StrUtil.removePrefix(s, "["), "]")));
         }
         return parentDeptIds;
+    }
+
+    @Override
+    public List<String> getExam(Long userId) {
+        return examMapper.examByUserId(userId);
     }
 
 

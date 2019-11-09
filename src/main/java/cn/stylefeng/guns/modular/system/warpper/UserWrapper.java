@@ -54,6 +54,7 @@ public class UserWrapper extends BaseControllerWrapper {
         map.put("roleName", ConstantFactory.me().getRoleName((String) map.get("roleId")));
         map.put("deptName", ConstantFactory.me().getDeptName(DecimalUtil.getLong(map.get("deptId"))));
         map.put("statusName", ConstantFactory.me().getStatusName((String) map.get("status")));
+        map.put("exam", ConstantFactory.me().getExam((Long) map.get("userId")));
     }
 
 }

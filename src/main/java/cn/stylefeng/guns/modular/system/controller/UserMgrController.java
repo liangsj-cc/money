@@ -32,6 +32,7 @@ import cn.stylefeng.guns.modular.system.factory.UserFactory;
 import cn.stylefeng.guns.modular.system.model.UserDto;
 import cn.stylefeng.guns.modular.system.service.UserService;
 import cn.stylefeng.guns.modular.system.warpper.UserWrapper;
+import cn.stylefeng.guns.modular.work.service.ExamUserService;
 import cn.stylefeng.roses.core.base.controller.BaseController;
 import cn.stylefeng.roses.core.datascope.DataScope;
 import cn.stylefeng.roses.core.reqres.response.ResponseData;
@@ -75,6 +76,10 @@ public class UserMgrController extends BaseController {
 
     @Autowired
     private UserService userService;
+
+
+    @Autowired
+    private ExamUserService examUserService;
 
     /**
      * 跳转到查看管理员列表的页面

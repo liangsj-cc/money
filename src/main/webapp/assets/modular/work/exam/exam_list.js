@@ -68,6 +68,12 @@ layui.use(['layer', 'form', 'table', 'admin', 'ax'], function () {
         Exam.onAddExam()
     })
 
+    $(".exam_item").click(()=>{
+        let eid = $(".exam_item .eid")
+        let examId = eid[0].value
+        window.location.href=`/exam/alone/${examId}`
+    })
+
     Exam.onDeleteExam = (data) => {
         var operation = function () {
             var ajax = new $ax(Feng.ctxPath + "/exam/delete", function () {
@@ -104,4 +110,6 @@ layui.use(['layer', 'form', 'table', 'admin', 'ax'], function () {
             Exam.onDeleteExam(data);
         }
     });
+
+
 });

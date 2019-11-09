@@ -1,3 +1,57 @@
 @layout("/common/_container.html",{plugins:["ztree"],js:["/assets/modular/work/exercise/info.js"]}){
-<div>123456</div>
+<style>
+    .exam-op span {
+        white-space: inherit
+    }
+
+    .exam-op div {
+        line-height: 18px;
+        color: #666;
+    }
+
+    .exam-op > div {
+        display: inline-flex;
+        margin-top: 10px;
+        margin-bottom: 5px;
+    }
+</style>
+
+<div class="layui-fluid">
+
+    <div class="layui-card">
+        <div class="layui-card-body">
+
+            <div lay-filter="exam-day" class="layui-form">
+
+
+                <div class="layui-form-item">
+                    <p>
+                        ${exerciseName}
+                        <span style="padding-left: 10px">
+                           正确答案（${right})
+                        </span>
+                    </p>
+                    <div class="exam-op">
+                        @if(isMore){
+                            @for( op in opts){
+                                <input type="checkbox" value="${opLP.index-1}"
+                                       name="1[${opLP.index-1}]"
+                                       lay-skin="primary"
+                                       title="${op}"><br/>
+                            @}
+                        @}else{
+                            @for( op in opts){
+                                <input type="radio" name="1" value="${opLP.index-1}"
+                                       lay-skin="primary"
+                                       title="${op}"><br/>
+
+                            @}
+
+                        @}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 @}

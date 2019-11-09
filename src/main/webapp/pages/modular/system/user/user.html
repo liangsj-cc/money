@@ -25,12 +25,18 @@
                                 <input id="timeLimit" class="layui-input" type="text" placeholder="注册时间"/>
                             </div>
                             <div class="layui-inline">
-                                <button id="btnSearch" class="layui-btn icon-btn"><i class="layui-icon">&#xe615;</i>搜索</button>
+                                <button id="btnSearch" class="layui-btn icon-btn"><i class="layui-icon">&#xe615;</i>搜索
+                                </button>
                                 @if(shiro.hasPermission("/mgr/add")){
-                                <button id="btnAdd" class="layui-btn icon-btn"><i class="layui-icon">&#xe654;</i>添加</button>
+                                <button id="btnAdd" class="layui-btn icon-btn"><i class="layui-icon">&#xe654;</i>添加
+                                </button>
                                 @}
-                                <button id="btnExp" class="layui-btn icon-btn"><i class="layui-icon">&#xe67d;</i>导出</button>
-                                <button id="btnExpin" class="layui-btn icon-btn"><i class="layui-icon">&#xe67d;</i>导入</button>
+                                <button id="btnExp" class="layui-btn icon-btn"><i class="layui-icon">&#xe67d;</i>导出
+                                </button>
+                                <button id="btnExpin" class="layui-btn icon-btn"><i class="layui-icon">&#xe67d;</i>导入
+                                </button>
+                                <button id="btnExam" class="layui-btn icon-btn"><i class="layui-icon">&#xe67d;</i>分配考试
+                                </button>
                             </div>
                         </div>
                     </div>
@@ -55,8 +61,27 @@
     <a class="layui-btn layui-btn-xs" lay-event="reset">重置密码</a>
     @}
 </script>
+<script type="text/html" id="exam">
+    {{#  let exams = d.exam }}
+    {{#  for(let a of exams){ }}
+    {{# let arr  = a.split("-") }}
+    {{# if(arr[1] === '0'){  }}
+    <span class="layui-badge">
+
+            {{arr[0]}} &nbsp;&nbsp;日考 <br/>
+        </span>
+    {{# }else{ }}
+
+    <span class="layui-badge layui-bg-green">
+            {{arr[0]}} &nbsp;&nbsp;月考 <br/>
+        </span>
+    {{# } }}
+
+    {{# } }}
+</script>
 
 <script type="text/html" id="statusTpl">
-    <input type="checkbox" lay-filter="status" value="{{d.userId}}" lay-skin="switch" lay-text="正常|冻结" {{d.status=='ENABLE'?'checked':''}} />
+    <input type="checkbox" lay-filter="status" value="{{d.userId}}" lay-skin="switch" lay-text="正常|冻结"
+           {{d.status=='ENABLE'?'checked':''}}/>
 </script>
 @}

@@ -18,6 +18,10 @@ layui.use(['layer', 'form', 'table', 'admin', 'ax', 'element'], function () {
     }
     setFrom();
 
+    $(".gback").click(()=>{
+        window.history.back();
+        return false
+    })
     const formval = () => {
         let ds = form.val('exam-day')
         let rs = {}
@@ -35,6 +39,8 @@ layui.use(['layer', 'form', 'table', 'admin', 'ax', 'element'], function () {
         }
         return rs;
     }
+
+
     const setpro = (rs) => {
         let a = $("#essize").val();
         $("#pro").attr("lay-percent", `${Object.keys(rs).length} / ${a}`)

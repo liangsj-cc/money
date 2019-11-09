@@ -24,7 +24,7 @@ layui.use(['layer', 'form', 'table', 'admin', 'ax'], function () {
             {field: 'createTime', sort: true, title: '创建时间'},
             {field: 'num', sort: true, title: '题目个数'},
             {field: 'type', sort: true, templet: '#type', title: '考试类型'},
-            {align: 'center', toolbar: '#tableBar', title: '操作', minWidth: 200}
+            //{align: 'center', toolbar: '#tableBar', title: '操作', minWidth: 200}
         ]];
     };
 
@@ -64,8 +64,15 @@ layui.use(['layer', 'form', 'table', 'admin', 'ax'], function () {
         Exam.search()
     })
 
-    $("#btnAdd").click(() => {
-        Exam.onAddExam()
+    $("#btnOk").click(() => {
+        var checkRows = table.checkStatus(Exam.tableId);
+        if (checkRows.data.length === 0) {
+            Feng.error("请选择考试")
+        } else {
+            admin.putTempData('examIds', JSON.stringify(checkRows.data.map(i => i.id)))
+            admin.closeThisDialog();
+
+        }
     })
 
     Exam.onDeleteExam = (data) => {

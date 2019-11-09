@@ -26,7 +26,11 @@
     <div class="layui-row layui-col-space15">
         <div class="layui-col-lg12">
             <div class="layui-card">
+                <div class="layui-card-header">
+                    <button class="layui-btn layui-btn-primary gback" >返回</button>
+                </div>
                 <div class="layui-card-body">
+
 
                     <div class="layui-progress layui-progress-big" lay-filter="exam-progress" lay-showpercent="true">
                         @if(answer != null){
@@ -45,10 +49,7 @@
                         <hr/>
                         @for(ex in es){
                         <div class="layui-form-item">
-                            <p
-
-
-                            >
+                            <p>
                                 ${exLP.index}.${ex.name}
                                 @if(answerRight !=null){
                                 <span style="padding-left: 5px">
@@ -101,6 +102,13 @@
                             <div class="layui-input-block">
                                 <button class="layui-btn" lay-filter="btnSubmit" lay-submit>保存</button>
                                 <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+                                <button class="layui-btn layui-btn-primary gback"  >返回</button>
+                            </div>
+                        </div>
+                        @}else{
+                        <div class="layui-form-item">
+                            <div class="layui-input-block">
+                                <button class="layui-btn layui-btn-primary gback" >返回</button>
                             </div>
                         </div>
                         @}

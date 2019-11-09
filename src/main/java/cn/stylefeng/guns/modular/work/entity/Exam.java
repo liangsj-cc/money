@@ -53,8 +53,6 @@ public class Exam  extends Bas  {
     @TableField(value = "selector")
     private String selector;
 
-    @TableField(value = "dept_id")
-    private Long deptId;
 
     // 题目个数
     @TableField(value = "num")

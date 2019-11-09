@@ -19,6 +19,7 @@ import cn.stylefeng.guns.modular.system.entity.Dict;
 import cn.stylefeng.guns.modular.system.entity.Menu;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * 常量生产工厂的接口
@@ -138,5 +139,10 @@ public interface IConstantFactory {
      * 获取所有父部门id
      */
     List<Long> getParentDeptIds(Long deptId);
+
+    /**
+     *
+     */
+    List<String> getExam(Long userId);
 
 }

@@ -1,4 +1,4 @@
-@layout("/common/_container.html",{plugins:["ztree"],js:["/assets/modular/work/exam/exam.js"]}){
+@layout("/common/_container.html",{plugins:["ztree"],js:["/assets/modular/work/exam/exam_show.js"]}){
 
 <div class="layui-body-header">
     <span class="layui-body-header-title">人员管理</span>
@@ -14,7 +14,8 @@
                             <div class="layui-inline">
                                 <input id="examName" class="layui-input" type="text" placeholder="题目"/>
                             </div>
-                            <div class="layui-inline"><label class="layui-form-label">考试类型</label>
+                            <div class="layui-inline">
+                                <label class="layui-form-label">考试类型</label>
                                 <div class="layui-input-block">
 
                                     <select id="examType" name="examType" lay-filter="aihao">
@@ -28,8 +29,8 @@
                                 <button id="btnSearch" class="layui-btn icon-btn">
                                     <i class="layui-icon">&#xe615;</i>搜索
                                 </button>
-                                <button id="btnAdd" class="layui-btn icon-btn">
-                                    <i class="layui-icon">&#xe654;</i>添加
+                                <button id="btnOk" class="layui-btn icon-btn">
+                                    <i class="layui-icon">&#xe654;</i>确定
                                 </button>
                             </div>
                         </div>

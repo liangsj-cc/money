@@ -4,10 +4,10 @@
 
     <!-- 通用查询映射结果 -->
     <resultMap id="BaseResultMap" type="cn.stylefeng.guns.modular.work.entity.Exam">
-        <id column="exam_id" property="examId" />
-        <result column="exam_name" property="examName" />
-        <result column="exam_type" property="examType" />
-        <result column="create_time" property="createTime" />
+        <id column="exam_id" property="examId"/>
+        <result column="exam_name" property="examName"/>
+        <result column="exam_type" property="examType"/>
+        <result column="create_time" property="createTime"/>
     </resultMap>
 
     <!-- 通用查询结果列 -->
@@ -25,13 +25,33 @@
         from work_exam
         where 1!= 0
         <if test="examName != null and examName != ''">
-            and   exam_name like  '%${examName}%' <!--CONCAT('%',#{people_name,jdbcType=VARCHAR},'%'))-->
+            and exam_name like '%${examName}%' <!--CONCAT('%',#{people_name,jdbcType=VARCHAR},'%'))-->
         </if>
         <if test="examType != null and examType != ''">
-            and   exam_type like  '%${examType}%' <!--CONCAT('%',#{people_dept,jdbcType=VARCHAR},'%'))-->
+            and exam_type like '%${examType}%' <!--CONCAT('%',#{people_dept,jdbcType=VARCHAR},'%'))-->
         </if>
 
     </select>
 
+    <select id="examByUserId" resultType="string">
+        SELECT
+	        CONCAT( e.NAME, "-", e.type )
+        FROM
+            work_exam AS e,
+            work_exam_user AS eu
+        WHERE
+            eu.user_id = #{user_id}
+            AND e.id = eu.exam_id
+    </select>
 
+    <select id="finExamByUserIdAndType" resultType="cn.stylefeng.guns.modular.work.entity.Exam">
+        SELECT
+            e.*
+        FROM
+            work_exam e
+            LEFT JOIN work_exam_user eu ON e.id = eu.exam_id
+            where 1=1
+            AND user_id = #{userId}
+            AND e.type = #{type}
+	</select>
 </mapper>
