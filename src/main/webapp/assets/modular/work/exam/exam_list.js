@@ -68,11 +68,9 @@ layui.use(['layer', 'form', 'table', 'admin', 'ax'], function () {
         Exam.onAddExam()
     })
 
-    $(".exam_item").click(()=>{
-        let eid = $(".exam_item .eid")
-        let examId = eid[0].value
+    const toExam = (eid)=>{
         window.location.href=`/exam/alone/${examId}`
-    })
+    }
 
     Exam.onDeleteExam = (data) => {
         var operation = function () {

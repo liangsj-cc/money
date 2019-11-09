@@ -39,8 +39,8 @@
 
                             @for(i in obj){
                             <div class="exam_item_c">
-                                <div class="exam_item">
-                                    <input type="hidden"class="eid" name="eid" value="${i.exam.id}">
+                                <div class="exam_item" onclick="window.location.href=`/exam/alone/${i.exam.id}`">
+                                    <input type="hidden" class="eid" name="eid" value="${i.exam.id}">
                                     <span class="exam_icon_span">
                                          <i style="font-size: 70px" class="layui-icon layui-icon-form"></i>
                                     </span>
@@ -49,7 +49,8 @@
                                             <span class="layui-badge layui-bg-green">已完成</span>
                                             <span class="layui-badge layui-bg-orange">${i.score}分(${i.rightSize}/${i.exam.num})</span>
                                         @}else{
-                                            <span class="layui-badge">未完成</span>
+
+                                            <span class="layui-badge">未完成  共${i.exam.num}题</span>
                                         @}
                                     </span>
                                     <span class="exam_icon_text">
