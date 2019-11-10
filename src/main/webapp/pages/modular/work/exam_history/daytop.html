@@ -1,0 +1,65 @@
+@layout("/common/_container.html",{js:["/assets/modular/work/exam_score/exam_list.js"]}){
+
+<style>
+    .exam_c {
+        display: flex;
+        flex-wrap: wrap;
+        flex-direction: row;
+    }
+
+    .exam_item_c {
+        margin: 10px auto;
+        padding: 0 3px;
+    }
+
+    .exam_item {
+        width: 110px;
+    }
+
+    .exam_icon_span {
+        height: 70px;
+        line-height: 70px;
+        margin: 0 auto;
+        display: block;
+        text-align: center
+    }
+
+    .exam_icon_text {
+        display: block;
+        text-align: center
+    }
+</style>
+<div class="layui-fluid">
+    <div class="layui-row layui-col-space15">
+        <div class="layui-col-lg12">
+            <div class="layui-card">
+                <div class="layui-card-body">
+                    <div class="exam_c">
+                        @if(list!=null){
+
+                            @for(i in list){
+                            <div class="exam_item_c">
+                                <div class="exam_item" onclick="window.location.href=`/exam/alone/`">
+                                    <input type="hidden" class="eid" name="eid" value="">
+                                    <span class="exam_icon_span">
+                                         <i style="font-size: 70px" class="layui-icon layui-icon-form"></i>
+                                    </span>
+                                    <span class="exam_icon_text exam_status">
+
+                                    </span>
+                                    <span class="exam_icon_text">
+                                        ${i.name} ${i.score}
+                                    </span>
+                                </div>
+                            </div>
+                            @}
+                        @}
+
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+@}

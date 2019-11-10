@@ -2,6 +2,7 @@ package cn.stylefeng.guns.modular.work.mapper;
 
 import cn.stylefeng.guns.modular.work.entity.Exam;
 import cn.stylefeng.guns.modular.work.entity.People;
+import cn.stylefeng.guns.modular.work.entity.TopList;
 import cn.stylefeng.roses.core.datascope.DataScope;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -27,4 +28,8 @@ public interface ExamMapper extends BaseMapper<Exam> {
     List<String> examByUserId(@Param("userId") Long userId);
 
     List<Exam> finExamByUserIdAndType(@Param("userId") Long userId, @Param("type") String type);
+
+    List<TopList> getDayTop(@Param("date")String date);
+
+    List<TopList> getMonthTop();
 }
