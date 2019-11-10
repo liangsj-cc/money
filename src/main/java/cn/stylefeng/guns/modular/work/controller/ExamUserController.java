@@ -33,6 +33,9 @@ public class ExamUserController extends BaseController {
         examUserService.remove(new LambdaQueryWrapper<ExamUser>().in(
                 ExamUser::getUserId, uIds
         ));
+        if(uIds==null|| eIds==null){
+            return SUCCESS_TIP;
+        }
         List<ExamUser> examUsers = uIds.stream().map(uid ->
                 eIds.stream().map(eid -> new ExamUser(uid, eid)).collect(Collectors.toList())
 
