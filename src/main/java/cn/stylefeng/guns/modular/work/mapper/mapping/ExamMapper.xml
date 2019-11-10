@@ -40,7 +40,7 @@
             work_exam AS e,
             work_exam_user AS eu
         WHERE
-            eu.user_id = #{user_id}
+            eu.user_id = #{userId}
             AND e.id = eu.exam_id
     </select>
 
