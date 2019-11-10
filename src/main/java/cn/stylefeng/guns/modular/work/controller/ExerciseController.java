@@ -40,7 +40,7 @@ public class ExerciseController extends BaseController {
 
     // 默认的导入模板头部
     private String[] chartDefaultHeader = new String[]{
-            "题目", "选项A", "选项B", "选项C", "选项D", "正确答案", "标签名"
+            "题目", "选项A", "选项B", "选项C", "选项D", "正确答案", "工种"
     };
 
     @Autowired
@@ -174,9 +174,11 @@ public class ExerciseController extends BaseController {
                 JSONArray options = new JSONArray();
 
                 opHeaders.forEach((i, item) -> {
-                    row.getCell(i).setCellType(Cell.CELL_TYPE_STRING);
-                    if (row.getCell(i) != null && StrUtil.isNotBlank(row.getCell(i).getStringCellValue())) {
-                        options.add(item + "." + row.getCell(i).getStringCellValue());
+                    if (row.getCell(i) != null ) {
+                        row.getCell(i).setCellType(Cell.CELL_TYPE_STRING);
+                        if(StrUtil.isNotBlank(row.getCell(i).getStringCellValue())){
+                            options.add(item + "." + row.getCell(i).getStringCellValue());
+                        }
                     }
                 });
                 exercise.setOptions(options.toJSONString());
