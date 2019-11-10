@@ -56,14 +56,14 @@
 	</select>
     <select id="getDayTop" resultType="cn.stylefeng.guns.modular.work.entity.TopList">
      select u.name,h.score  from work_exam_history h LEFT JOIN sys_user u on u.user_id = h.user_id
-     where h.score is not NULL and h.create_time  between CONCAT(#{date},' 00:00:00') and CONCAT(#{date},' 23:59:59')
-    and h.exam_type=0 ORDER BY h.score desc
+     where h.score is not NULL and h.create_time  between #{beginTime} and  #{endTime}
+    and h.exam_type=0 ORDER BY h.score desc limit 0,10
 	</select>
 
 
     <select id="getMonthTop" resultType="cn.stylefeng.guns.modular.work.entity.TopList">
      select u.name,h.score  from work_exam_history h LEFT JOIN sys_user u on u.user_id = h.user_id
      where h.score is not NULL and PERIOD_DIFF( date_format( now( ) , '%Y%m' ) , date_format( h.create_time, '%Y%m' ) ) =1
-    and h.exam_type=1 ORDER BY h.score desc
+    and h.exam_type=1 ORDER BY h.score desc limit 0,10
 	</select>
 </mapper>

@@ -29,7 +29,7 @@ public interface ExamMapper extends BaseMapper<Exam> {
 
     List<Exam> finExamByUserIdAndType(@Param("userId") Long userId, @Param("type") String type);
 
-    List<TopList> getDayTop(@Param("date")String date);
+    List<TopList> getDayTop(@Param("beginTime")String date ,@Param("endTime")String endTime);
 
     List<TopList> getMonthTop();
 }
