@@ -77,6 +77,7 @@ public interface Const {
             "/error",
             "/global/error",
             "/exam/day",
-            "/exam/month");
+            "/exam/month",
+            "/MP_verify_eoBpJCWVIa6LFYmY.txt");
 
 }
