@@ -26,6 +26,9 @@ import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.scheduling.annotation.EnableScheduling;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
 /**
@@ -37,6 +40,8 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 @SpringBootApplication
 @EnableScheduling
 @EnableWebMvc
+@RestController
+@RequestMapping
 public class GunsApplication {
 
     private final static Logger logger = LoggerFactory.getLogger(GunsApplication.class);
@@ -45,6 +50,12 @@ public class GunsApplication {
         SpringApplication.run(GunsApplication.class, args);
         logger.info(GunsApplication.class.getSimpleName() + " is success!");
     }
+
+    @GetMapping("MP_verify_eoBpJCWVIa6LFYmY.txt")
+    public String vxs(){
+        return "eoBpJCWVIa6LFYmY";
+    }
+
 
 
 
