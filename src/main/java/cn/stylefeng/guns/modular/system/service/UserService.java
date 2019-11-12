@@ -279,8 +279,7 @@ public class UserService extends ServiceImpl<UserMapper, User> {
                     }
                     user.setEmail(row.getCell(3).getStringCellValue());//邮箱
                     DecimalFormat format = new DecimalFormat("#");
-                    Number value = row.getCell(4).getNumericCellValue();
-                    String phone = format.format(value);
+                    String phone  = row.getCell(4).getStringCellValue();
                     user.setPhone(phone);//手机号
                     String roleid = roleService.getRoleIdByRoleName("考试人员");
                     user.setRoleId(roleid);//角色id

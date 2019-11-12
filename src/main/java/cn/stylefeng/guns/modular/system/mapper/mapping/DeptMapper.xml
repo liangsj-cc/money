@@ -64,7 +64,7 @@
     <select id="getDeptByfullName" resultType="cn.stylefeng.guns.modular.system.entity.Dept">
         select
         <include refid="Base_Column_List"/>
-         from sys_dept pt where pt.full_name like  CONCAT('%',#{teamName},'%')
+         from sys_dept pt where pt.full_name=#{teamName}
          and pt.pid=(SELECT d.dept_id FROM sys_dept d where d.full_name like CONCAT('%',#{fullName},'%'))
     </select>
 
