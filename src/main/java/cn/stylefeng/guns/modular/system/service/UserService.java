@@ -265,36 +265,38 @@ public class UserService extends ServiceImpl<UserMapper, User> {
             sheet0.removeRow(row0);
             for (Row row : sheet0) {
                 if (row.getCell(0) != null) {//空行不执行
+                    if(!row.getCell(0).getStringCellValue().isEmpty()){
                     UserDto user = new UserDto();
-                    user.setName(row.getCell(0).getStringCellValue());//姓名
-                    String identityCard= row.getCell(1).getStringCellValue();
-                    if(identityCard.trim().length()!=18){
-                        throw new ServiceException(BizExceptionEnum.IDENTITYCARD_ERROR);
+                        user.setName(row.getCell(0).getStringCellValue());//姓名
+                        String identityCard= row.getCell(1).getStringCellValue();
+                        if(identityCard.trim().length()!=18){
+                                throw new ServiceException(BizExceptionEnum.IDENTITYCARD_ERROR);
+                        }
+                        user.setAccount(identityCard);//身份证号
+                        if (row.getCell(2).getStringCellValue().equals("男")) {//性别
+                            user.setSex("M");
+                        } else {
+                            user.setSex("F");
+                        }
+                        user.setEmail(row.getCell(3).getStringCellValue());//邮箱
+                        DecimalFormat format = new DecimalFormat("#");
+                        String phone  = row.getCell(4).getStringCellValue();
+                        user.setPhone(phone);//手机号
+                        String roleid = roleService.getRoleIdByRoleName("考试人员");
+                        user.setRoleId(roleid);//角色id
+                        String deptName = row.getCell(5).getStringCellValue();//部门名称
+                        String teamName = row.getCell(6).getStringCellValue();//队组名称
+                        Dept dept = deptService.getDeptByfullName(deptName.trim(),teamName.trim());
+                        if ("".equals(dept.getDeptId())) {
+                            throw new ServiceException(BizExceptionEnum.DEPT_ID_IS_NULL);
+                        }
+                        user.setPassword("111111");
+                        user.setDeptId(dept.getDeptId());
+                        user.setStatus("ENABLE");
+                        user.setBirthday(new Date());
+                        //解析成json后添加至数据库
+                        this.exportUser(user);
                     }
-                    user.setAccount(identityCard);//身份证号
-                    if (row.getCell(2).getStringCellValue().equals("男")) {//性别
-                        user.setSex("M");
-                    } else {
-                        user.setSex("F");
-                    }
-                    user.setEmail(row.getCell(3).getStringCellValue());//邮箱
-                    DecimalFormat format = new DecimalFormat("#");
-                    String phone  = row.getCell(4).getStringCellValue();
-                    user.setPhone(phone);//手机号
-                    String roleid = roleService.getRoleIdByRoleName("考试人员");
-                    user.setRoleId(roleid);//角色id
-                    String deptName = row.getCell(5).getStringCellValue();//部门名称
-                    String teamName = row.getCell(6).getStringCellValue();//队组名称
-                    Dept dept = deptService.getDeptByfullName(deptName.trim(),teamName.trim());
-                    if ("".equals(dept.getDeptId())) {
-                        throw new ServiceException(BizExceptionEnum.DEPT_ID_IS_NULL);
-                    }
-                    user.setPassword("111111");
-                    user.setDeptId(dept.getDeptId());
-                    user.setStatus("ENABLE");
-                    user.setBirthday(new Date());
-                    //解析成json后添加至数据库
-                    this.exportUser(user);
                 }
             }
         } catch (Exception e) {
