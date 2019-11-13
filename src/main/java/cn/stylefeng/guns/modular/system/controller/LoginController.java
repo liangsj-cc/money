@@ -82,8 +82,10 @@ public class LoginController extends BaseController {
      * @Date 2018/12/23 5:41 PM
      */
     @RequestMapping(value = "/login", method = RequestMethod.GET)
-    public String login() {
+    public String login(RedirectAttributes redirectAttributes, @RequestParam(required = false) String path) {
+
         if (ShiroKit.isAuthenticated() || ShiroKit.getUser() != null) {
+            redirectAttributes.addAttribute("path", path);
             return REDIRECT + "/";
         } else {
             return "/login.html";
