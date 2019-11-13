@@ -29,6 +29,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
 
@@ -53,7 +55,7 @@ public class LoginController extends BaseController {
      * @Date 2018/12/23 5:41 PM
      */
     @RequestMapping(value = "/", method = RequestMethod.GET)
-    public String index(Model model) {
+    public String index(Model model, @RequestParam(value = "path", required = false) String path) {
 
         //获取当前用户角色列表
         ShiroUser user = ShiroKit.getUserNotNull();
@@ -67,6 +69,8 @@ public class LoginController extends BaseController {
 
         List<MenuNode> menus = userService.getUserMenuNodes(roleList);
         model.addAttribute("menus", menus);
+
+        model.addAttribute("path", path);
 
         return "/index.html";
     }
@@ -93,7 +97,8 @@ public class LoginController extends BaseController {
      * @Date 2018/12/23 5:42 PM
      */
     @RequestMapping(value = "/login", method = RequestMethod.POST)
-    public String loginVali() {
+    public String loginVali(RedirectAttributes redirectAttributes,
+                            @RequestParam(required = false) String path) {
 
         String username = super.getPara("username").trim();
         String password = super.getPara("password").trim();
@@ -117,7 +122,7 @@ public class LoginController extends BaseController {
         LogManager.me().executeLog(LogTaskFactory.loginLog(shiroUser.getId(), getIp()));
 
         ShiroKit.getSession().setAttribute("sessionFlag", true);
-
+        redirectAttributes.addAttribute("path", path);
         return REDIRECT + "/";
     }
 

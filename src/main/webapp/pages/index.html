@@ -34,6 +34,7 @@
 
 @/* 加入contextPath属性和session超时的配置 */
 <script type="text/javascript">
+
     var Feng = {
         ctxPath: "",
         addCtx: function (ctx) {
@@ -54,9 +55,11 @@
         var admin = layui.admin;
         var index = layui.index;
 
+        let a = "${path}"
+        let loadPage = a.trim().length > 0 ? a : "/system/console"
         // 默认加载主页
         index.loadHome({
-            menuPath: '${ctxPath}/system/console',
+            menuPath: '${ctxPath}' + loadPage,
             menuName: '<i class="layui-icon layui-icon-home"></i>'
         });
 
