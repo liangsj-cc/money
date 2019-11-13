@@ -7,8 +7,10 @@
         *
         FROM
         work_exercise AS w
-        WHERE
-        1=1
+        <if test="condition.size > 0">
+            WHERE
+            1 != 1
+        </if>
         <foreach collection="condition.entrySet()" item="item" index="key">
             <if test="key!=null and key!= ''">
                 OR JSON_EXTRACT(w.label, CONCAT('$.','"${key}"')) = #{item}
@@ -22,8 +24,10 @@
         RAND( ) AS r
         FROM
         work_exercise AS w
-        WHERE
-        1 = 1
+        <if test="selector.size > 0">
+            WHERE
+            1 != 1
+        </if>
         <foreach collection="selector.entrySet()" item="item" index="key">
             <if test="key!=null and key!= ''">
                 OR JSON_EXTRACT(w.label, CONCAT('$.','"${key}"')) = #{item}

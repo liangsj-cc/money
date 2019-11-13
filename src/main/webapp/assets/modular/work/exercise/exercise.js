@@ -33,7 +33,13 @@ layui.use(['layer', 'form', 'table', 'admin', 'ax'], function () {
         for (let i = 0; i < 3; i++) {
             queryData[$(`#label-${i}`).val()] = $(`#key-${i}`).val()
         }
-        table.reload(Exercise.tableId, {where: {lables: JSON.stringify(queryData)}});
+        let a = {}
+        Object
+            .keys(queryData)
+            .filter(i => i.trim().length > 0)
+            .forEach(i=>a[i] = queryData[i].trim())
+        console.log(a)
+        table.reload(Exercise.tableId, {where: {lables: JSON.stringify(a)}});
     }
     // // 渲染表格
     var tableResult = table.render({
