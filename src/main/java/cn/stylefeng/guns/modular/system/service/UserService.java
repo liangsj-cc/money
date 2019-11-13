@@ -1,6 +1,7 @@
 package cn.stylefeng.guns.modular.system.service;
 
 import cn.hutool.core.bean.BeanUtil;
+import cn.hutool.core.util.StrUtil;
 import cn.stylefeng.guns.core.common.constant.Const;
 import cn.stylefeng.guns.core.common.constant.state.ManagerStatus;
 import cn.stylefeng.guns.core.common.exception.BizExceptionEnum;
@@ -265,7 +266,7 @@ public class UserService extends ServiceImpl<UserMapper, User> {
             sheet0.removeRow(row0);
             for (Row row : sheet0) {
                 if (row.getCell(0) != null) {//空行不执行
-                    if(!row.getCell(0).getStringCellValue().isEmpty()){
+                    if(StrUtil.isNotBlank(row.getCell(0).getStringCellValue())){
                     UserDto user = new UserDto();
                         user.setName(row.getCell(0).getStringCellValue());//姓名
                         String identityCard= row.getCell(1).getStringCellValue();
