@@ -303,7 +303,7 @@ public class UserService extends ServiceImpl<UserMapper, User> {
                 }
             }
         } catch (Exception e) {
-            throw new ServiceException(BizExceptionEnum.USER_INPORT_ERROR);
+           e.printStackTrace();
         }
         return map;
     }
