@@ -65,10 +65,8 @@
         select
         <include refid="Base_Column_List"/>
         FROM
-        sys_dept d
-        WHERE
-        d.pid = ( SELECT dp.dept_id FROM sys_dept dp WHERE dp.full_name = #{fullName} AND dp.pid=( select p.dept_id from sys_dept p where pid=0) )
-         AND d.full_name = #{teamName}
+         sys_dept d where d.pid=(select t.dept_id from sys_dept t where t.pid=0 and t.full_name=#{fullName}) and d.full_name=#{teamName}
+
     </select>
 
 </mapper>
