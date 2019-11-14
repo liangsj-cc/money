@@ -274,13 +274,13 @@ public class UserService extends ServiceImpl<UserMapper, User> {
                                 throw new ServiceException(BizExceptionEnum.IDENTITYCARD_ERROR);
                         }
                         user.setAccount(identityCard);//身份证号
-                        if(StrUtil.isNotBlank(row.getCell(2).getStringCellValue())){
-                            if (row.getCell(2).getStringCellValue().equals("男")){//性别
-                                user.setSex("M");
-                            } else {
-                                user.setSex("F");
-                            }
-                        }
+//                        if(StrUtil.isNotBlank(row.getCell(2).getStringCellValue())){
+//                            if (row.getCell(2).getStringCellValue().equals("男")){//性别
+//                                user.setSex("M");
+//                            } else {
+//                                user.setSex("F");
+//                            }
+//                        }
                         //user.setEmail(row.getCell(3).getStringCellValue());//邮箱
                         //DecimalFormat format = new DecimalFormat("#");
                         //String phone  = row.getCell(4).getStringCellValue();
