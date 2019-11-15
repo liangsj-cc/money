@@ -15,13 +15,14 @@
 
 
     <select id="selectUserScore" resultType="map">
-               SELECT
+         SELECT
             u.name,d.simple_name,e.score,e.create_time,e.exam_type
         FROM
             work_exam_history e
             LEFT JOIN sys_user u ON u.user_id = e.user_id
             LEFT JOIN sys_dept d ON u.dept_id = d.dept_id
              where u.status != 'DELETED'
+             and e.score is not null
         <if test="name != null and name != ''">
             and (u.phone like CONCAT('%',#{name},'%')
             or u.account like CONCAT('%',#{name},'%')
@@ -30,6 +31,7 @@
         <if test="examType != null and examType != ''">
             and e.exam_type = #{examType}
         </if>
+
         <if test="deptId != null and deptId != 0">
             and (d.dept_id = #{deptId} or d.dept_id in ( select p.dept_id from sys_dept p where p.pids like CONCAT('%$[', #{deptId}, '$]%') escape '$' ))
         </if>
@@ -39,6 +41,11 @@
             ORDER BY e.create_time desc
     </select>
 
+<!--    <select id="selectNoExamUser" resultMap="map">-->
+<!--        select-->
+
+
+<!--    </select>-->
 
 
 </mapper>

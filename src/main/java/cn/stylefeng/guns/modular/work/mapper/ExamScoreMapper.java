@@ -15,4 +15,8 @@ public interface ExamScoreMapper {
      */
     Page<Map<String, Object>> selectUserScore(@Param("page") Page page, @Param("dataScope") DataScope dataScope, @Param("name") String name, @Param("beginTime") String beginTime, @Param("endTime") String endTime, @Param("deptId") Long deptId, @Param("examType")String examType);
 
+    /**
+     * 查询未考试人员
+     */
+    Page<Map<String, Object>> selectNoExamUser(@Param("page")Page page,@Param("dataScope") DataScope dataScope,@Param("name") String name,@Param("beginTime") String beginTime,@Param("endTime") String endTime, @Param("deptId") Long deptId,@Param("examType") String examType);
 }

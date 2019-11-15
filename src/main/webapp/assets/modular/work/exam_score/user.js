@@ -52,6 +52,7 @@ layui.use(['layer', 'form', 'table', 'ztree', 'laydate', 'admin', 'ax'], functio
         queryData['name'] = $("#name").val();
         queryData['timeLimit'] = $("#timeLimit").val();
         queryData['examType'] = $("input[name='exam_type']:checked").val();
+        queryData['isexam'] = $("input[name='isexam']:checked").val();
         table.reload(MgrUser.tableId, {where: queryData});
     };
 

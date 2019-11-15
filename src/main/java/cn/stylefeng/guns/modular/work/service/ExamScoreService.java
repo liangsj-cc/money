@@ -19,4 +19,9 @@ public class ExamScoreService {
         Page page = LayuiPageFactory.defaultPage();
         return examScoreMapper.selectUserScore(page, dataScope, name, beginTime, endTime, deptId,examType);
     }
+
+    public Page<Map<String, Object>> selectNoExamUser(DataScope dataScope, String name, String beginTime, String endTime, Long deptId, String examType) {
+        Page page = LayuiPageFactory.defaultPage();
+        return examScoreMapper.selectNoExamUser(page, dataScope, name, beginTime, endTime, deptId,examType);
+    }
 }
