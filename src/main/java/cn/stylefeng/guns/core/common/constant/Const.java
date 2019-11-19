@@ -78,6 +78,8 @@ public interface Const {
             "/global/error",
             "/exam/day",
             "/exam/month",
+            "/exam_history/monthTop",
+            "/exam_history/dayTop",
             "/MP_verify_eoBpJCWVIa6LFYmY.txt");
 
 }
