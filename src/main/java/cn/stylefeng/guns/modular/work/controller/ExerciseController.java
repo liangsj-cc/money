@@ -40,7 +40,7 @@ public class ExerciseController extends BaseController {
 
     // 默认的导入模板头部
     private String[] chartDefaultHeader = new String[]{
-            "题目", "选项A", "选项B", "选项C", "选项D", "正确答案", "工种"
+            "题目", "选项A", "选项B", "选项C", "选项D", "选项E", "选项F", "选项G", "正确答案", "工种"
     };
 
     @Autowired
