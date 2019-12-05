@@ -48,7 +48,7 @@
         as examType
          from sys_user u
          left join sys_dept d on u.dept_id=d.dept_id
-         where 1>0
+        where u.status != 'DELETED'
           <if test="name != null and name != ''">
          and (u.phone like CONCAT('%',#{name},'%')
          or u.account like CONCAT('%',#{name},'%')
