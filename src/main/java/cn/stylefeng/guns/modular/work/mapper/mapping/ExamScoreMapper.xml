@@ -36,16 +36,37 @@
             and (d.dept_id = #{deptId} or d.dept_id in ( select p.dept_id from sys_dept p where p.pids like CONCAT('%$[', #{deptId}, '$]%') escape '$' ))
         </if>
         <if test="beginTime != null and beginTime != '' and endTime != null and endTime != ''">
-            and (e.create_time between CONCAT(#{beginTime},' 00:00:00') and CONCAT(#{endTime},' 23:59:59'))
+            and (e.create_time between CONCAT(#{beginTime},' 00:00:00') and CONCAT(#{beginTime},' 23:59:59'))
         </if>
             ORDER BY e.create_time desc
     </select>
 
-<!--    <select id="selectNoExamUser" resultMap="map">-->
-<!--        select-->
-
-
-<!--    </select>-->
+    <select id="selectNoExamUser" resultType="map">
+        select u.name as userName,d.simple_name as deptName ,#{beginTime} as examDate,
+        <if test="examType==0">'日考' </if>
+        <if test="examType==1">'月考' </if>
+        as examType
+         from sys_user u
+         left join sys_dept d on u.dept_id=d.dept_id
+         where 1>0
+          <if test="name != null and name != ''">
+         and (u.phone like CONCAT('%',#{name},'%')
+         or u.account like CONCAT('%',#{name},'%')
+         or u.name like CONCAT('%',#{name},'%'))
+         </if>
+          and  u.user_id not in
+        (select h.user_id from work_exam_history h where 1>0
+        <if test="beginTime != null and beginTime != '' ">
+            and  (h.create_time BETWEEN CONCAT(#{beginTime},' 00:00:00') and CONCAT(#{beginTime},' 23:59:59'))
+        </if>
+        <if test="examType != null and examType != ''">
+            and h.exam_type=#{examType}
+        </if>
+        )
+        <if test="deptId != null and deptId != 0">
+            and (d.dept_id = #{deptId} or d.dept_id in ( select p.dept_id from sys_dept p where p.pids like CONCAT('%$[', #{deptId}, '$]%') escape '$' ))
+        </if>
+    </select>
 
 
 </mapper>
